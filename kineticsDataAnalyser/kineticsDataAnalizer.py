@@ -34,8 +34,11 @@ for i, line in enumerate(lines):
         endOfData = i-3
         print('endOfData', endOfData)
         if endOfData > 10:
+            # get endOfData from the data set "entry" 2 and above,
+            # "entry" 1 results in endOfData = -2 and does not get appended
             rowNumberDataEnds.append(endOfData)
 
+    # one row after "units" is the start of data set
     if word2 in line:
         print('line of word2')
         print(i)
@@ -67,19 +70,21 @@ for a in range(len(rowNumberDataStarts)):
 
 
 # 2(S1-S2)/(E1+E2)  where S is specular intensity and E is SQRT(S)
+# print('dataList', dataList)
 print('len((dataList))', len(dataList))
-for a in range(len(dataList)):
+while a in range(len(dataList)-1):
     print('datalist[a]', dataList[a])
+    print('datalist[a+1]', dataList[a+1])
     indivisualResiduals = []
     individualRelativeDifferences = []
 
     for b in range(len(dataList[a])):
-        if b+1 < len(dataList[a]):
+        if b <= len(dataList[a]):
             print('a', a)
             print('b', b)
             S1 = float(dataList[a][b][1])
             # S1 = dataList[a][b][1]
-            S2 = float(dataList[a][b+1][1])
+            S2 = float(dataList[a+1][b][1])
             E1 = math.sqrt(S1)
             E2 = math.sqrt(S2)
             # print('S1, S2', S1, S2)
@@ -99,6 +104,9 @@ for a in range(len(dataList)):
             a+1
         print('indivisualResiduals', indivisualResiduals)
         print('individualRelativeDifferences', individualRelativeDifferences)
+
+
+
 
 
 
