@@ -3,19 +3,10 @@ import math
 filePath = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer/LionSi_kinetics4805_0.refl'
 
 class ReadRefl1d:
-    # fulltext = []
-    with open(filePath) as f:
-        lines = f.readlines()
-        # print(lines)
-    #     fulltext.append(lines)
-    # print('fulltext', fulltext)
-    # print(len(fulltext))
 
     # this fails with space in a string ("title":"cdr slit")
     text = open(filePath, 'r')
     fullText = [line.split(' ') for line in text.readlines()]
-    print('fullText', fullText)
-    print(len(fullText))
 
     rfl1dData = []
     word1 = 'name'
@@ -24,85 +15,71 @@ class ReadRefl1d:
     unitRowNumbers = []
     rowNumberDataStarts = []
     rowNumberDataEnds = []
+
+    with open(filePath) as f:
+        lines = f.readlines()
+
     totalRow = 0
     for i, line in enumerate(lines):
         if word1 in line:
-            print(word1)
-            print(i)
-            firstRowOfData = i + 1
-            # print(firstRowOfData)
+
             nameRowNumbers.append(i)
+            # data ends 3 rows before rpw with 'name"
             endOfData = i - 3
-            print('endOfData', endOfData)
             if endOfData > 10:
-                # get endOfData from the data set "entry" 2 and above,
-                # "entry" 1 results in endOfData = -2 and does not get appended
+                # get endOfData from the data set ' "entry":1 ' and above,
+                # ' "entry":0 ' results in endOfData = -2 and does not append rowNumberDataEnds
                 rowNumberDataEnds.append(endOfData)
 
-        # one row after "units" is the start of data set
         if word2 in line:
-            print('line of word2')
-            print(i)
             unitRowNumbers.append(i)
+            # one row after "units" is the start of data set
             dataStarts = i + 1
             rowNumberDataStarts.append(dataStarts)
+
+        # move pn to next row
         totalRow = totalRow + 1
 
-    print((totalRow))
+    # append the last row of where data ends
     rowNumberDataEnds.append(totalRow)
 
-    print('nameRowNumbers', nameRowNumbers)
-    print('unitRowNumbers', unitRowNumbers)
-    print('rowNumberDataEnds', rowNumberDataEnds)
-    print('rowNumberDataStarts', rowNumberDataStarts)
 
     dataList = []
     for a in range(len(rowNumberDataStarts)):
-        print('a', a)
         startRow = rowNumberDataStarts[a]
-        print('startRow', startRow)
-        print(type(startRow))
         endRow = rowNumberDataEnds[a] + 1
+        # list[start:stop], value of stop is the point where the list cuts off. +1 to include the last data row
+        # individualList = [["Qz", "Intensity", "uncertainty", "resolution"], ["Qz",,, "resolution"]...]
+        # extract one data set entry from .refl1d
         individualList = fullText[startRow: endRow]
-        # test = fullText[10:20]
-        # print('test', test)
-        print('individualList', individualList)
-        # print('type inlist', type(individualList[0][0]))
 
         # change dataList from strings to floats
         individualListInFloat = []
         for b in range(len(individualList)):
             oneRowInFloat = []
+            # 4 columns in each row
             for c in range(4):
                 oneDataInARow = float(individualList[b][c])
                 oneRowInFloat.append(oneDataInARow)
             individualListInFloat.append(oneRowInFloat)
-        print('individualListInFloat', individualListInFloat)
         dataList.append(individualListInFloat)
 
 
 
 
-    # 2(S1-S2)/(E1+E2)  where S is specular intensity and E is SQRT(S)
-    # print('dataList', dataList)
-    print('len((dataList))', len(dataList))
+    ### this part needs to be fixed to take any selected entry number ##@
     while a in range(len(dataList) - 1):
-        print('datalist[a]', dataList[a])
-        print('datalist[a+1]', dataList[a + 1])
         indivisualResiduals = []
         individualRelativeDifferences = []
 
+        #len(dataList[a]) is number of rows in each entry
         for b in range(len(dataList[a])):
             if b <= len(dataList[a]):
-                print('a', a)
-                print('b', b)
+                # 2(S1-S2)/(E1+E2)  where S is specular intensity and E is SQRT(S)
                 S1 = dataList[a][b][1]
-                # S1 = dataList[a][b][1]
                 S2 = dataList[a + 1][b][1]
                 E1 = math.sqrt(S1)
                 E2 = math.sqrt(S2)
-                # print('S1, S2', S1, S2)
-                print('S1, S2, E1, E2', S1, S2, E1, E2)
 
                 try:
                     residual = 2 * (S1 - S2) / (E1 + E2)
@@ -116,8 +93,7 @@ class ReadRefl1d:
 
             else:
                 a + 1
-            print('indivisualResiduals', indivisualResiduals)
-            print('individualRelativeDifferences', individualRelativeDifferences)
+
 
 
 
