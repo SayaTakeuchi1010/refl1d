@@ -70,7 +70,7 @@ class GuiTwo:
         labels.append(label)
 
     # size of check box part
-    rax = plt.axes([0.8, 0.2, 0.2, 0.5])
+    rax = ax_1[1]
     # visibility = [line.get_visible() for line in dataToPlot[i]]
 
     # labels read the above list created with for loop
