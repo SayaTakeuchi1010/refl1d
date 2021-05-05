@@ -4,6 +4,8 @@ filePath = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer/LionSi_kinetics48
 
 class ReadRefl1d:
 
+
+
     # this fails with space in a string ("title":"cdr slit")
     text = open(filePath, 'r')
     fullText = [line.split(' ') for line in text.readlines()]
@@ -93,6 +95,16 @@ class ReadRefl1d:
 
             else:
                 a + 1
+
+
+    # def getSampleName(self, lines):
+    for i, line in enumerate(lines):
+        if 'name' in line:
+            sampleName = line[11:-2]
+    # return sampleName
+
+    print('sampleName', sampleName)
+
 
 
 
