@@ -6,6 +6,7 @@ from itertools import cycle
 
 class GuiTwo:
     text = rr.dataList
+    sampleName = rr.sampleName
 
     dataToPlot = []
     for a in range(len(rr.dataList)):
@@ -39,7 +40,6 @@ class GuiTwo:
         qzIntUncertainty.append(listOfQz)
         qzIntUncertainty.append(listOfInt)
         qzIntUncertainty.append(listOfUncertainty)
-
         dataToPlot.append(qzIntUncertainty)
     # print('dataToPlot', dataToPlot)
 
@@ -52,26 +52,29 @@ class GuiTwo:
     ax_1[0].set_ylabel('intensity')
     ax_1[0].ticklabel_format(axis='both', style='scientific')
     ax_1[0].semilogy()
+    plt.legend(loc='best')
 
 
     # plot thw whole entry(0 ~ n) in one plot
     for i, item in enumerate(dataToPlot):
         # TODO label in for loop does not show with check button
         ax_1[0].plot(item[0], item[1], label='entry' + str(i), color=next(colors))
-        plt.errorbar(item[0], item[1], yerr=item[2], color=next(colors), barsabove=True)
-
-        # Make checkbuttons with all plotted lines with correct visibility
+        # TODO uplims=True, lowlims=True not working, dodt appears bot not accurate error bar
+        ax_1[0].errorbar(item[0], item[1], yerr=item[2], color=next(colors), ms=0.1, mew=1)
+        # add 'color, entry i' box in left panel
+        # TODO this is not a place where it gets error 'No handles with labels found to put in legend.'
+        ax_1[0].legend(loc='best')
 
 
     # get list of labels
     labels = []
     for i in range(len(dataToPlot)):
-        label = 'entry' + str(i)
+        label = sampleName + '_entry' + str(i)
         labels.append(label)
 
-    # size of check box part
+    # make check box inside panel 2 (location 1 in figsize = (8, 4), nrows=1, ncols=3)
     rax = ax_1[1]
-    # visibility = [line.get_visible() for line in dataToPlot[i]]
+    # visibility = [labels.get_visible() for line in labels]
 
     # labels read the above list created with for loop
     check = CheckButtons(rax, labels)
@@ -83,9 +86,6 @@ class GuiTwo:
 
 
 
-    plt.legend(loc='best')
 
-    # log scale to check box
-    # plt.semilogy()
 
     plt.show()
