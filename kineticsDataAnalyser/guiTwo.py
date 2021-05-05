@@ -1,40 +1,42 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import CheckButtons
-from readRefl1d import ReadRefl1d as rr
+from . import readRefl1d
 from itertools import cycle
 
 class GuiTwo:
-    text = rr.dataList
-    sampleName = rr.sampleName
+    rr = readRefl1d.ReadRefl1d
+    dataInFloat = rr.createDataList
+    print('dataInFloat', dataInFloat)
+    sampleName = rr.getSampleName
 
     dataToPlot = []
-    for a in range(len(rr.dataList)):
+    for a in range(len(dataInFloat)):
         print('a', a)
         qzIntUncertainty = []
         # create list of Qz
         listOfQz= []
-        for i in range(len(rr.dataList[a])):
-            # print('len(rr.dataList[a])', len(rr.dataList[a]))
-            # print('rr.dataList[a][i][0]', rr.dataList[a][i][0])
-            # print(type(rr.dataList[a][i][0]))
-            listOfQz.append(rr.dataList[a][i][0])
+        for i in range(len(dataInFloat[a])):
+            # print('len(dataInFloat[a])', len(dataInFloat[a]))
+            # print('dataInFloat[a][i][0]', dataInFloat[a][i][0])
+            # print(type(dataInFloat[a][i][0]))
+            listOfQz.append(dataInFloat[a][i][0])
         print('listOfQz', listOfQz)
 
         listOfInt = []
-        for i in range(len(rr.dataList[a])):
+        for i in range(len(dataInFloat[a])):
             # print('len(rr.dataList[a])', len(rr.dataList[a]))
             # print('rr.dataList[a][i][0]', rr.dataList[a][i][1])
             # print(type(rr.dataList[a][i][1]))
-            listOfInt.append(rr.dataList[a][i][1])
+            listOfInt.append(dataInFloat[a][i][1])
         print('listOfInt', listOfInt)
 
         listOfUncertainty = []
-        for i in range(len(rr.dataList[a])):
+        for i in range(len(dataInFloat[a])):
             # print('len(rr.dataList[a])', len(rr.dataList[a]))
             # print('rr.dataList[a][i][0]', rr.dataList[a][i][2])
             # print(type(rr.dataList[a][i][2]))
-            listOfUncertainty.append(rr.dataList[a][i][2])
+            listOfUncertainty.append(dataInFloat[a][i][2])
         print('listOfUncertainty', listOfUncertainty)
 
         qzIntUncertainty.append(listOfQz)
