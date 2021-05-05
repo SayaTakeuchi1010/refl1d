@@ -97,10 +97,10 @@ class ReadRefl1d:
                 a + 1
 
 
-    # def getSampleName(self, lines):
+    # def getSampleName(self, lines):s
     for i, line in enumerate(lines):
         if 'name' in line:
-            sampleName = line[10:-2]
+            sampleName = line[11:-2]
     # return sampleName
 
     print('sampleName', sampleName)
