@@ -96,6 +96,7 @@ textBoxLocation = ax_1[1,1]
 textBox = TextBox(textBoxLocation, 'input')
 
 def submit(expression):
+    ax_1[1, 0].clear()
     selectedEntry = list(eval(expression))
     print('selectedEntry', selectedEntry)
     print(type(selectedEntry))
@@ -110,7 +111,8 @@ def submit(expression):
 
     ax_1[1, 0].set_xlabel('Qz')
     ax_1[1, 0].set_ylabel('intensity')
-    ax_1[1, 0].ticklabel_format(axis='both', style='scientific')
+    # error below
+    # ax_1[1, 0].ticklabel_format(axis='both', style='scientific')
     ax_1[1, 0].semilogy()
     ax_1[1, 0].autoscale_view()
     plt.draw()
