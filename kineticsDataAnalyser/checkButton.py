@@ -48,8 +48,7 @@ allplotsName = []
 for i in range(len(dataToPlot)):
     lineiData = ax_1[0].plot(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), color=next(colors))
     allplotsData.append(lineiData)
-    errori = ax_1[0].errorbar(dataToPlot[i][0], dataToPlot[i][1], yerr=dataToPlot[i][2], color=next(colors), ms=0.1,
-                              mew=1)
+    # errori = ax_1[0].errorbar(dataToPlot[i][0], dataToPlot[i][1], yerr=dataToPlot[i][2], color=next(colors), ms=0.1, mew=1)
     # add 'color, entry i' box in left panel
     ax_1[0].legend(loc='best')
     # get tuple of line names
@@ -77,6 +76,7 @@ chxbox = CheckButtons(rax, labels, activated)
 
 def set_visible(label):
     index = labels.index(label)
+    # allplotsData[index][0]: get inside of the list to get <class 'matplotlib.lines.Line2D'>
     print('allplotsData[index]', allplotsData[index][0])
     print(type(allplotsData[index][0]))
     allplotsData[index][0].set_visible(not allplotsData[index][0].get_visible())
