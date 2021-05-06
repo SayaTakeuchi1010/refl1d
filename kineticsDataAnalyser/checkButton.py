@@ -52,9 +52,9 @@ for i in range(len(dataToPlot)):
     lineiData = ax_1[0, 0].plot(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), color=next(colors))
     # print('lineiData', lineiData)
     allplotsData.append(lineiData)
-    errori = ax_1[0, 0].errorbar(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), yerr=dataToPlot[i][2], color=next(colors))
+    # errori = ax_1[0, 0].errorbar(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), yerr=dataToPlot[i][2], color=next(colors))
     # print('errori', errori)
-    allplotsErrorbar.append(errori)
+    # allplotsErrorbar.append(errori)
     # add 'color, entry i' box in left panel
     ax_1[0, 0].legend(loc='best')
 
@@ -96,10 +96,24 @@ textBoxLocation = ax_1[1,1]
 textBox = TextBox(textBoxLocation, 'input')
 
 def submit(expression):
-    selectedEntry = int(eval(expression))
+    selectedEntry = list(eval(expression))
     print('selectedEntry', selectedEntry)
+    print(type(selectedEntry))
+
+    selectedPlotsData = []
+    for i in range(len(selectedEntry)):
+        print('i in submit for loop', i)
+        print('selectedEntry[i]', selectedEntry[i])
+        erroriData = ax_1[1, 0].errorbar(dataToPlot[selectedEntry[i]][0], dataToPlot[selectedEntry[i]][1], label='entry' + str(selectedEntry[i]), yerr=dataToPlot[selectedEntry[i]][2], color=next(colors))
+        selectedPlotsData.append(erroriData)
+        ax_1[1, 0].legend(loc='best')
+
+    ax_1[1, 0].set_xlabel('Qz')
+    ax_1[1, 0].set_ylabel('intensity')
+    ax_1[1, 0].ticklabel_format(axis='both', style='scientific')
+    ax_1[1, 0].semilogy()
+    ax_1[1, 0].autoscale_view()
     plt.draw()
-    ax_1[1,0].autoscale_view()
 
 textBox.on_submit(submit)
 
