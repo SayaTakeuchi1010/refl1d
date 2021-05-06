@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import CheckButtons
+from matplotlib.widgets import TextBox
 from readRefl1d import ReadRefl1d as rr
 from itertools import cycle
 
@@ -34,27 +35,28 @@ for a in range(len(dataInFloat)):
 
 colors = cycle(["aqua", "black", "blue", "fuchsia", "gray", "green", "lime", "maroon", "navy", "olive", "purple", "red", "silver", "teal", "yellow"])
 
-fig_1, ax_1 = plt.subplots(figsize = (8, 4), nrows=1, ncols=3)
-ax_1[0].set_title('Qz vs. Intensity')
-ax_1[0].set_xlabel('Qz')
-ax_1[0].set_ylabel('intensity')
-ax_1[0].ticklabel_format(axis='both', style='scientific')
-ax_1[0].semilogy()
+fig_1, ax_1 = plt.subplots(figsize = (8, 4), nrows=2, ncols=3)
+ax_1[0, 0].set_title('Qz vs. Intensity')
+ax_1[0, 0].set_xlabel('Qz')
+ax_1[0, 0].set_ylabel('intensity')
+ax_1[0, 0].ticklabel_format(axis='both', style='scientific')
+ax_1[0, 0].semilogy()
 plt.legend(loc='best')
+
 
 allplotsData = []
 allplotsErrorbar = []
 
 # plot thw whole entry(0 ~ n) in one plot
 for i in range(len(dataToPlot)):
-    lineiData = ax_1[0].plot(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), color=next(colors))
-    print('lineiData', lineiData)
+    lineiData = ax_1[0, 0].plot(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), color=next(colors))
+    # print('lineiData', lineiData)
     allplotsData.append(lineiData)
-    errori = ax_1[0].errorbar(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), yerr=dataToPlot[i][2], color=next(colors))
-    print('errori', errori)
+    errori = ax_1[0, 0].errorbar(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), yerr=dataToPlot[i][2], color=next(colors))
+    # print('errori', errori)
     allplotsErrorbar.append(errori)
     # add 'color, entry i' box in left panel
-    ax_1[0].legend(loc='best')
+    ax_1[0, 0].legend(loc='best')
 
 
 # get list of labels
@@ -64,12 +66,12 @@ for i in range(len(dataToPlot)):
     labels.append(label)
 
 # make check box inside panel 2 (location 1 in figsize = (8, 4), nrows=1, ncols=3)
-rax = ax_1[1]
+rax = ax_1[0, 1]
 
 activated = []
 for i in range(len(dataToPlot)):
     activated.append(True)
-print('activated', activated)
+# print('activated', activated)
 
 chxbox = CheckButtons(rax, labels, activated)
 
@@ -78,19 +80,28 @@ def set_visible(label):
     # allplotsData[index][0]: get inside of the list to get <class 'matplotlib.lines.Line2D'>
     # print('allplotsData[index]', allplotsData[index][0])
     # print(type(allplotsData[index][0]))
-    # allplotsData[index][0].set_visible(not allplotsData[index][0].get_visible())
+    allplotsData[index][0].set_visible(not allplotsData[index][0].get_visible())
 
     ### may need to handle inside the order in artist to deal with error bar ###
     # https://stackoverflow.com/questions/19470104/python-matplotlib-errorbar-legend-picking
-    print('allplotsErrorbar[index]', allplotsErrorbar[index])
-    print(type(allplotsErrorbar[index]))
-    allplotsErrorbar[index].set_visible(not allplotsErrorbar[index].get_visible())
+    # print('allplotsErrorbar[index]', allplotsErrorbar[index])
+    # print(type(allplotsErrorbar[index]))
+    # allplotsErrorbar[index].set_visible(not allplotsErrorbar[index].get_visible())
 
     plt.draw()
 
 chxbox.on_clicked(set_visible)
 
+textBoxLocation = ax_1[1,1]
+textBox = TextBox(textBoxLocation, 'input')
 
+def submit(expression):
+    selectedEntry = int(eval(expression))
+    print('selectedEntry', selectedEntry)
+    plt.draw()
+    ax_1[1,0].autoscale_view()
+
+textBox.on_submit(submit)
 
 
 # x = range(0,11)
