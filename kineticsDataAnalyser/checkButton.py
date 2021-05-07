@@ -92,8 +92,10 @@ def set_visible(label):
 
 chxbox.on_clicked(set_visible)
 
-textBoxLocation = ax_1[1,1]
+textBoxLocation = fig_1.add_axes([0.05, 0.05, 0.05, 0.05])
+### make sure input has comma after number for single entry ###
 textBox = TextBox(textBoxLocation, 'input')
+ax_1[1,0]
 
 def submit(expression):
     ax_1[1, 0].clear()
@@ -109,12 +111,16 @@ def submit(expression):
         selectedPlotsData.append(erroriData)
         ax_1[1, 0].legend(loc='best')
 
-    ax_1[1, 0].set_xlabel('Qz')
-    ax_1[1, 0].set_ylabel('intensity')
+    ax_1[1, 0].set_title('Qz vs. Intensity (error bar)')
+    ax_1[1, 0].set_xlabel('Qz ')
+    ax_1[1, 0].set_ylabel('intensity ')
     # error below
     # ax_1[1, 0].ticklabel_format(axis='both', style='scientific')
     ax_1[1, 0].semilogy()
-    ax_1[1, 0].autoscale_view()
+    # ax_1[1, 0].autoscale_view()
+
+    # below does not work
+    # fig.subplots_adjust(bottom=0.5)
     plt.draw()
 
 textBox.on_submit(submit)
