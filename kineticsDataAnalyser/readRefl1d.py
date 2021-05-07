@@ -1,5 +1,4 @@
 import math
-# from checkButton import entryNumberForResidual
 
 filePath = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer/LionSi_kinetics4805_0.refl'
 
