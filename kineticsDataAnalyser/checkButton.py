@@ -4,6 +4,10 @@ from matplotlib.widgets import TextBox
 from readRefl1d import ReadRefl1d as rr
 from itertools import cycle
 
+# def __init__():
+
+
+
 # get list from readRefl1d
 dataInFloat = rr.dataList
 sampleName = rr.sampleName
@@ -49,7 +53,7 @@ allplotsErrorbar = []
 
 # plot thw whole entry(0 ~ n) in one plot
 for i in range(len(dataToPlot)):
-    lineiData = ax_1[0, 0].plot(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), color=next(colors))
+    lineiData = ax_1[0, 0].plot(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), color=next(colors), marker='.')
     # print('lineiData', lineiData)
     allplotsData.append(lineiData)
     # errori = ax_1[0, 0].errorbar(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), yerr=dataToPlot[i][2], color=next(colors))
@@ -95,7 +99,7 @@ chxbox.on_clicked(set_visible)
 textBoxLocation = fig_1.add_axes([0.05, 0.05, 0.05, 0.05])
 ### make sure input has comma after number for single entry ###
 textBox = TextBox(textBoxLocation, 'input')
-ax_1[1,0]
+
 
 def submit(expression):
     ax_1[1, 0].clear()
@@ -124,6 +128,25 @@ def submit(expression):
     plt.draw()
 
 textBox.on_submit(submit)
+
+
+# show residual plot
+entryForResidualsLocation = fig_1.add_axes([0.5, 0.05, 0.05, 0.05])
+### make sure input has comma after number for single entry ###
+entryForResiduals = TextBox(entryForResidualsLocation, 'selected entry number')
+ax_1[1, 1].set_title('Qz vs. Residual')
+ax_1[1, 0].set_xlabel('Qz ')
+ax_1[1, 0].set_ylabel('Residual: 2(S1-S2)/(E1 + E2)')
+
+def getEntryNumber(expression):
+    entryNumberForResidual = list(eval(expression))
+    print('entryNumberForResidual', entryNumberForResidual)
+    print(type(entryNumberForResidual))
+    return entryNumberForResidual
+
+entryForResiduals.on_submit(getEntryNumber)
+
+
 
 
 # x = range(0,11)
