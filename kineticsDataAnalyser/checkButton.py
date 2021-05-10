@@ -105,7 +105,7 @@ chxbox.on_clicked(set_visible)
 
 ax_1[1, 0].set_title('Qz vs. Intensity (error bar)')
 ax_1[1, 0].set_xlabel('Qz ')
-ax_1[1, 0].set_ylabel('intensity ')
+ax_1[1, 0].set_ylabel('Intensity ')
 
 textBoxLocation = fig_1.add_axes([0.05, 0.05, 0.05, 0.05])
 ### make sure input has comma after number for single entry ###
@@ -127,7 +127,7 @@ def submit(expression):
 
     ax_1[1, 0].set_title('Qz vs. Intensity (error bar)')
     ax_1[1, 0].set_xlabel('Qz ')
-    ax_1[1, 0].set_ylabel('intensity ')
+    ax_1[1, 0].set_ylabel('Intensity ')
     # error below
     # ax_1[1, 0].ticklabel_format(axis='both', style='scientific')
     ax_1[1, 0].semilogy()
@@ -201,12 +201,12 @@ def getEntryNumber(expression):
 
     ax_1[1, 1].set_ylabel('Residual:2(S1-S2)/(E1+E2)', color = 'r')
     ax_1[1, 1].tick_params(axis='y', labelcolor='r')
-    residuals = ax_1[1, 1].plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, color='r', marker='.')
+    residualsPlot = ax_1[1, 1].plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, color='r', marker='.')
 
     ax_1_2 = ax_1[1, 1].twinx()
     ax_1_2.tick_params(axis='y', labelcolor='b')
     ax_1_2.set_ylabel('Relative Differences', color='b')
-    relativeDifferences = ax_1_2.plot(dataToPlot[entryNumberForResidual[0]][0], relativeDifferencesList, color='b', marker='.')
+    relativeDifferencesPlot = ax_1_2.plot(dataToPlot[entryNumberForResidual[0]][0], relativeDifferencesList, color='b', marker='.')
 
     # print('residual plot before draw')
 
@@ -216,12 +216,64 @@ entryForResiduals.on_submit(getEntryNumber)
 
 ### residuals plot part end ####
 
+### combine data and plot part ###
+
 entryForCombineDataLocation = fig_1.add_axes([0.8, 0.9, 0.05, 0.05])
 ### make sure input has comma after number for single entry ###
 entryForCombineData = TextBox(entryForCombineDataLocation, 'combine data')
 
 ax_1[0, 2].set_title('combine data')
+ax_1[0, 2].set_xlabel('Qz')
+ax_1[0, 2].set_ylabel('intensity')
+ax_1[0, 2].semilogy()
+
+def combineData(expression):
+    ax_1[0, 2].clear()
+    # entry must be only two selected data (list length must be 2 to make inside for-loop work
+    entryNumberForCombineData = list(eval(expression))
+
+    combinedDataList = []
+
+    for a in range(len(dataToPlot[entryNumberForCombineData[0]][0])):
+        S1 = dataToPlot[entryNumberForCombineData[0]][1][a]
+        S2 = dataToPlot[entryNumberForCombineData[1]][1][a]
+
+        individualCombinedData = (S1+S2)/2
+        combinedDataList.append(individualCombinedData)
+
+    print('combinedDataList', combinedDataList)
+
+    ax_1[0, 2].set_xlabel('Qz')
+    ax_1[0, 2].set_ylabel('Intensity')
+    ax_1[0, 2].semilogy()
+
+    combinedDataPlot = ax_1[0, 2].plot(dataToPlot[entryNumberForCombineData[0]][0], combinedDataList, color='k', marker='.')
+
+    # put Qz and combined intensity in one list
+    combinedQzIntList = []
+    for a in range(len(dataToPlot[entryNumberForCombineData[0]][0])):
+        # text format: str(Qz) + (space) + str(Intensity)
+        oneLine= str(dataToPlot[entryNumberForCombineData[0]][0][a]) + ' ' + str(combinedDataList[a])
+        combinedQzIntList.append(oneLine)
+    print('combinedQzIntList', combinedQzIntList)
+    # export combnied data into text file
+    textFileName = sampleName + '_entry' + str(entryNumberForCombineData[0]) + '+entry' + str(entryNumberForCombineData[1]) +'.txt'
+    f = open(textFileName, "w+")
+    # below doesn't work
+    # for i in range(len(combinedQzIntList)):
+    #     f.write(${combinedQzIntList{i}})
+
+    for element in combinedQzIntList:
+        f.write(element)
+        f.write('\n')
+
+    f.close
 
 
+    plt.draw()
+
+entryForCombineData.on_submit(combineData)
+
+### combine data and plot part end ###
 
 plt.show()
