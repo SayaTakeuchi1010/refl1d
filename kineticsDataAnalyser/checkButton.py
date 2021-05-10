@@ -131,8 +131,8 @@ ax_1[1, 0].set_ylabel('Residual: 2(S1-S2)/(E1 + E2)')
 # ntryNumberForResidualList = []
 def getEntryNumber(expression):
     entryNumberForResidual = list(eval(expression))
-    print('entryNumberForResidual', entryNumberForResidual)
-    print(type(entryNumberForResidual))
+    # print('entryNumberForResidual', entryNumberForResidual)
+    # print(type(entryNumberForResidual))
     # entryNumberForResidualList.append(entryNumberForResidual)
     # return entryNumberForResidual
 
@@ -145,10 +145,10 @@ def getEntryNumber(expression):
 
     # dataToPlot[list of "Qz"][list of "Intensity"][list of "uncertainty"]
     for a in range(len(dataToPlot[entryNumberForResidual[0]][0])):
-        print('entryNumberForResidual[0]', entryNumberForResidual[0])
-        print('entryNumberForResidual[1]', entryNumberForResidual[1])
-        print('dataToPlot[entryNumberForResidual[0]]', dataToPlot[entryNumberForResidual[0]][0])
-        print('dataToPlot[entryNumberForResidual[1]]', dataToPlot[entryNumberForResidual[1]][0])
+        # print('entryNumberForResidual[0]', entryNumberForResidual[0])
+        # print('entryNumberForResidual[1]', entryNumberForResidual[1])
+        # print('dataToPlot[entryNumberForResidual[0]]', dataToPlot[entryNumberForResidual[0]][0])
+        # print('dataToPlot[entryNumberForResidual[1]]', dataToPlot[entryNumberForResidual[1]][0])
 
 
         # 2(S1-S2)/(E1+E2)  where S is specular intensity and E is SQRT(S)
@@ -157,7 +157,7 @@ def getEntryNumber(expression):
         E1 = math.sqrt(S1)
         E2 = math.sqrt(S2)
 
-        print('S1, S2, E1, E2', S1, S2, E1, E2)
+        # print('S1, S2, E1, E2', S1, S2, E1, E2)
 
         try:
             residual = 2 * (S1 - S2) / (E1 + E2)
@@ -169,25 +169,12 @@ def getEntryNumber(expression):
             residualsList.append('value zero')
             relativeDifferencesList.append('value zero')
 
-    # else:
-    #     a + 1
 
-    print('residualsList', residualsList)
-    print('relativeDifferencesList', relativeDifferencesList)
+    # print('residualsList', residualsList)
+    # print('relativeDifferencesList', relativeDifferencesList)
 
-
-    entryNumberA = entryNumberForResidual[0]
-    print('entryNumberA', entryNumberA)
-    entryNumberB = entryNumberForResidual[1]
-    # residualListA = residualList[0]
-    # print('residualListA', residualListA)
-    # residualListB = residualList[1]
-    # print('residualListB', residualListB)
-
-    gtoupAData = ax_1[1, 1].plot(dataToPlot[entryNumberA][0], dataToPlot[entryNumberA][1], label='entry' + str(entryNumberA),
-                                 color='r', marker='.')
-    gtoupBData = ax_1[1, 1].plot(dataToPlot[entryNumberB][0], residualListB, label='entry' + str(entryNumberB),
-                                 color='k', marker='.')
+    residuals = ax_1[1, 1].plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, label='Residual',color='r', marker='.')
+    relativeDifferences = ax_1[1, 1].plot(dataToPlot[entryNumberForResidual[0]][0], relativeDifferencesList, label='relativeDifferences',color='k', marker='.')
     ax_1[1, 1].legend(loc='best')
 
     plt.draw()
