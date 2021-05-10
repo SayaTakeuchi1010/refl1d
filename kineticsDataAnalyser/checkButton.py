@@ -4,7 +4,7 @@ from matplotlib.widgets import TextBox
 from readRefl1d import ReadRefl1d as rr
 from itertools import cycle
 import math
-
+import os
 
 # get list from readRefl1d
 dataInFloat = rr.dataList
@@ -234,6 +234,7 @@ def combineData(expression):
 
     combinedDataList = []
 
+    # take length of Qz column, should be the same uf u take other columns
     for a in range(len(dataToPlot[entryNumberForCombineData[0]][0])):
         S1 = dataToPlot[entryNumberForCombineData[0]][1][a]
         S2 = dataToPlot[entryNumberForCombineData[1]][1][a]
@@ -256,8 +257,21 @@ def combineData(expression):
         oneLine= str(dataToPlot[entryNumberForCombineData[0]][0][a]) + ' ' + str(combinedDataList[a])
         combinedQzIntList.append(oneLine)
     print('combinedQzIntList', combinedQzIntList)
-    # export combnied data into text file
-    textFileName = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer/combined/'+ sampleName + '_entry' + str(entryNumberForCombineData[0]) + '+entry' + str(entryNumberForCombineData[1]) +'.txt'
+
+    parentDirectory = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer'
+    folderName = sampleName + '_Combined'
+    path = os.path.join(parentDirectory, folderName)
+    try:
+        os.mkdir(path)
+    except OSError as error:
+        print(error)
+        pass
+
+    folderDirectory = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer/' + folderName + '/'
+
+
+        # export combnied data into text file
+    textFileName = folderDirectory + sampleName + '_entry' + str(entryNumberForCombineData[0]) + '+entry' + str(entryNumberForCombineData[1]) +'.txt'
     f = open(textFileName, "w+")
     # below doesn't work
     # for i in range(len(combinedQzIntList)):
