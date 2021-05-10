@@ -12,18 +12,18 @@ sampleName = rr.sampleName
 
 dataToPlot = []
 for a in range(len(dataInFloat)):
-    print('a', a)
+    # print('a', a)
     qzIntUncertainty = []
     # create list of Qz
     listOfQz = []
     for i in range(len(dataInFloat[a])):
         listOfQz.append(dataInFloat[a][i][0])
-    print('listOfQz', listOfQz)
+    # print('listOfQz', listOfQz)
 
     listOfInt = []
     for i in range(len(dataInFloat[a])):
         listOfInt.append(dataInFloat[a][i][1])
-    print('listOfInt', listOfInt)
+    # print('listOfInt', listOfInt)
 
     listOfUncertainty = []
     for i in range(len(dataInFloat[a])):
@@ -125,11 +125,15 @@ entryForResidualsLocation = fig_1.add_axes([0.5, 0.05, 0.05, 0.05])
 ### make sure input has comma after number for single entry ###
 entryForResiduals = TextBox(entryForResidualsLocation, 'selected entry number')
 ax_1[1, 1].set_title('Qz vs. Residual')
-ax_1[1, 0].set_xlabel('Qz ')
-ax_1[1, 0].set_ylabel('Residual: 2(S1-S2)/(E1 + E2)')
+ax_1[1, 1].set_xlabel('Qz ')
+ax_1[1, 1].set_ylabel('Residual: 2(S1-S2)/(E1 + E2)')
 
 # ntryNumberForResidualList = []
 def getEntryNumber(expression):
+    ax_1[1, 1].clear()
+    ax_1[1, 1].set_title('Qz vs. Residual')
+    ax_1[1, 1].set_xlabel('Qz ')
+
     entryNumberForResidual = list(eval(expression))
     # print('entryNumberForResidual', entryNumberForResidual)
     # print(type(entryNumberForResidual))
@@ -166,16 +170,26 @@ def getEntryNumber(expression):
             relativeDifferencesList.append(relativeDifference)
         except:
             # if E1+E2 = 0 or S1+S2 = 0
-            residualsList.append('value zero')
-            relativeDifferencesList.append('value zero')
+            residualsList.append(0)
+            relativeDifferencesList.append(0)
 
 
     # print('residualsList', residualsList)
     # print('relativeDifferencesList', relativeDifferencesList)
 
+    ax_1[1, 1].set_ylabel('Residual:2(S1-S2)/(E1+E2)', color = 'r')
+    ax_1[1, 1].tick_params(axis='y', labelcolor='r')
     residuals = ax_1[1, 1].plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, label='Residual',color='r', marker='.')
-    relativeDifferences = ax_1[1, 1].plot(dataToPlot[entryNumberForResidual[0]][0], relativeDifferencesList, label='relativeDifferences',color='k', marker='.')
-    ax_1[1, 1].legend(loc='best')
+    # ax_1[1, 1].legend(loc='best')
+
+    #ax_1.tick_params(axis='y', labelcolor='r')
+    ax2 = ax_1[1, 1].twinx()
+    ax2.tick_params(axis='y', labelcolor='b')
+    ax2.set_ylabel('Relative Differences', color='b')
+    relativeDifferences = ax2.plot(dataToPlot[entryNumberForResidual[0]][0], relativeDifferencesList, label='relativeDifferences',color='b', marker='.')
+    # ax2.legend(loc='best')
+    #ax2.legend(loc='best')
+    print('residual plot before draw')
 
     plt.draw()
 
