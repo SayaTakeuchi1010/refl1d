@@ -257,7 +257,7 @@ def combineData(expression):
         combinedQzIntList.append(oneLine)
     print('combinedQzIntList', combinedQzIntList)
     # export combnied data into text file
-    textFileName = sampleName + '_entry' + str(entryNumberForCombineData[0]) + '+entry' + str(entryNumberForCombineData[1]) +'.txt'
+    textFileName = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer/combined/'+ sampleName + '_entry' + str(entryNumberForCombineData[0]) + '+entry' + str(entryNumberForCombineData[1]) +'.txt'
     f = open(textFileName, "w+")
     # below doesn't work
     # for i in range(len(combinedQzIntList)):
