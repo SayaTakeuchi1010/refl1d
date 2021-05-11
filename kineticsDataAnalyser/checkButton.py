@@ -45,7 +45,7 @@ ax_1[0, 0].set_xlabel('Qz')
 ax_1[0, 0].set_ylabel('intensity')
 ax_1[0, 0].ticklabel_format(axis='both', style='scientific')
 ax_1[0, 0].semilogy()
-plt.legend(loc='best')
+# plt.legend(loc='best')
 
 
 allplotsData = []
@@ -258,6 +258,7 @@ def combineData(expression):
         combinedQzIntList.append(oneLine)
     print('combinedQzIntList', combinedQzIntList)
 
+    # create a folder  for combined data text if it doesn't exist
     parentDirectory = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer'
     folderName = sampleName + '_Combined'
     path = os.path.join(parentDirectory, folderName)
@@ -270,9 +271,9 @@ def combineData(expression):
     folderDirectory = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer/' + folderName + '/'
 
 
-        # export combnied data into text file
+    # export combnied data into text file
     textFileName = folderDirectory + sampleName + '_entry' + str(entryNumberForCombineData[0]) + '+entry' + str(entryNumberForCombineData[1]) +'.txt'
-    f = open(textFileName, "w+")
+    f = open(textFileName, "a+")
     # below doesn't work
     # for i in range(len(combinedQzIntList)):
     #     f.write(${combinedQzIntList{i}})
