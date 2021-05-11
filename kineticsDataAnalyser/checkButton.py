@@ -45,7 +45,6 @@ ax_1[0, 0].set_xlabel('Qz')
 ax_1[0, 0].set_ylabel('intensity')
 ax_1[0, 0].ticklabel_format(axis='both', style='scientific')
 ax_1[0, 0].semilogy()
-# plt.legend(loc='best')
 
 
 allplotsData = []
@@ -232,29 +231,59 @@ def combineData(expression):
     # entry must be only two selected data (list length must be 2 to make inside for-loop work
     entryNumberForCombineData = list(eval(expression))
 
-    combinedDataList = []
+    # check how many data to combine
+    numberOfDataToCombine = len(entryNumberForCombineData)
+    print('numberOfDataToCombine', numberOfDataToCombine)
+
+    # create empty list to put in combined data
+    combinedIntensityList = []
+
+    dataToCombine = []
+    for n in range(numberOfDataToCombine):
+        oneData = dataToPlot[entryNumberForCombineData[n]][1]
+        dataToCombine.append(oneData)
+
+    print('dataToCombine', dataToCombine)
 
     # take length of Qz column, should be the same uf u take other columns
+    # for loop appears to be working. entry1+entry2 in previous code with individualCombinedData = (S1+S2)/2 match with current code
     for a in range(len(dataToPlot[entryNumberForCombineData[0]][0])):
-        S1 = dataToPlot[entryNumberForCombineData[0]][1][a]
-        S2 = dataToPlot[entryNumberForCombineData[1]][1][a]
+        n=0
+        sumData = 0
+        while n in range(numberOfDataToCombine):
+            oneData = dataToPlot[entryNumberForCombineData[n]][1][a]
+            #print('dataToPlot[entryNumberForCombineData[n]][1]', dataToPlot[entryNumberForCombineData[n]][1][a])
+            #print(type(oneData))
+            sumData = sumData + oneData
+            #print('sumData', sumData)
+            n = n+1
+            #print('n', n)
 
-        individualCombinedData = (S1+S2)/2
-        combinedDataList.append(individualCombinedData)
+        # combine n number of data points and divide by n
+        indivisualCombinedIntensity = sumData/n
 
-    print('combinedDataList', combinedDataList)
+        # S1 = dataToPlot[entryNumberForCombineData[0]][1][a]
+        # S2 = dataToPlot[entryNumberForCombineData[1]][1][a]
 
+        # individualCombinedData = (S1+S2)/2
+        combinedIntensityList.append(indivisualCombinedIntensity)
+
+    print('combinedIntensityList', combinedIntensityList)
+
+    # set aces label and semi log scale for y
     ax_1[0, 2].set_xlabel('Qz')
     ax_1[0, 2].set_ylabel('Intensity')
     ax_1[0, 2].semilogy()
 
-    combinedDataPlot = ax_1[0, 2].plot(dataToPlot[entryNumberForCombineData[0]][0], combinedDataList, color='k', marker='.')
+    # x axis : Qz = dataToPlot[entryNumberForCombineData[0]][0]
+    # y axis : combined intensity = combinedDataList
+    combinedDataPlot = ax_1[0, 2].plot(dataToPlot[entryNumberForCombineData[0]][0], combinedIntensityList, color='k', marker='.')
 
     # put Qz and combined intensity in one list
     combinedQzIntList = []
     for a in range(len(dataToPlot[entryNumberForCombineData[0]][0])):
         # text format: str(Qz) + (space) + str(Intensity)
-        oneLine= str(dataToPlot[entryNumberForCombineData[0]][0][a]) + ' ' + str(combinedDataList[a])
+        oneLine= str(dataToPlot[entryNumberForCombineData[0]][0][a]) + ' ' + str(combinedIntensityList[a])
         combinedQzIntList.append(oneLine)
     print('combinedQzIntList', combinedQzIntList)
 
@@ -267,17 +296,39 @@ def combineData(expression):
     except OSError as error:
         print(error)
         pass
-
+    # make folder directory
     folderDirectory = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer/' + folderName + '/'
 
 
-    # export combnied data into text file
-    textFileName = folderDirectory + sampleName + '_entry' + str(entryNumberForCombineData[0]) + '+entry' + str(entryNumberForCombineData[1]) +'.txt'
-    f = open(textFileName, "a+")
-    # below doesn't work
-    # for i in range(len(combinedQzIntList)):
-    #     f.write(${combinedQzIntList{i}})
+    # combined entry names
+    n = 0
+    combinedEntryNames = '_entry'
+    # for two dataset entry, range is range(2), takes position 0 ~ 2.
+    for n in range(numberOfDataToCombine):
+        print('n', n)
 
+        print('range(numberOfDataToCombine-1)', range(numberOfDataToCombine))
+        if n < numberOfDataToCombine-1:
+            print('n beggining of  if', n)
+            combinedEntryNames = combinedEntryNames + str(entryNumberForCombineData[n]) + ','
+            # n = n + 1
+            print('n end of  if', n)
+            print('numberOfDataToCombine-1', numberOfDataToCombine)
+        elif n == numberOfDataToCombine-1:
+            print('in elif')
+            combinedEntryNames = combinedEntryNames + str(entryNumberForCombineData[n])
+
+    print('combinedEntryNames', combinedEntryNames)
+
+
+
+
+    # export combnied data into text file
+    textFileName = folderDirectory + sampleName + combinedEntryNames +'.txt'
+    f = open(textFileName, "a+")
+    # 'w+' overwrites previous data? "Date modified" time gets updated"
+
+    # take each line in list and put into txt
     for element in combinedQzIntList:
         f.write(element)
         f.write('\n')
