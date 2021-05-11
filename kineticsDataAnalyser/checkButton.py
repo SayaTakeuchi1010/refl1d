@@ -56,7 +56,7 @@ for i in range(len(dataToPlot)):
     # print('lineiData', lineiData)
     allplotsData.append(lineiData)
     # add 'color, entry i' box in left panel
-    ax_1[0, 0].legend(loc='best')
+    ax_1[0, 0].legend(loc='best', fontsize='small')
 
 
 ### plot original data in ax_1[0, 0] end ###
@@ -85,6 +85,8 @@ chxbox = CheckButtons(rax, labels, activated)
 
 def set_visible(label):
     index = labels.index(label)
+    # print('label', label)
+    # print('labels', labels)
     # allplotsData[index][0]: get inside of the list to get <class 'matplotlib.lines.Line2D'>
     # print('allplotsData[index]', allplotsData[index][0])
     # print(type(allplotsData[index][0]))
@@ -93,6 +95,10 @@ def set_visible(label):
     ### may need to handle inside the order in artist to deal with error bar ###
     # https://stackoverflow.com/questions/19470104/python-matplotlib-errorbar-legend-picking
     # allplotsErrorbar[index].set_visible(not allplotsErrorbar[index].get_visible())
+
+    ax_1[0, 0].legend(loc='best', fontsize='small')
+    # lgd = ax_1[0, 0].legend()
+    # lgd.set_visible(True)
     plt.draw()
 
 chxbox.on_clicked(set_visible)
