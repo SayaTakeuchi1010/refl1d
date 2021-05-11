@@ -309,7 +309,7 @@ def combineData(expression):
 
         print('range(numberOfDataToCombine-1)', range(numberOfDataToCombine))
         if n < numberOfDataToCombine-1:
-            print('n beggining of  if', n)
+            print('n begining of  if', n)
             combinedEntryNames = combinedEntryNames + str(entryNumberForCombineData[n]) + ','
             # n = n + 1
             print('n end of  if', n)
@@ -319,8 +319,6 @@ def combineData(expression):
             combinedEntryNames = combinedEntryNames + str(entryNumberForCombineData[n])
 
     print('combinedEntryNames', combinedEntryNames)
-
-
 
 
     # export combnied data into text file
@@ -335,6 +333,10 @@ def combineData(expression):
 
     f.close
 
+    # read list of combined data in combine data folder
+    # path = folderDirectory
+    dirct = os.listdir(folderDirectory)
+    print('dirct', dirct)
 
     plt.draw()
 
