@@ -10,36 +10,7 @@ from itertools import cycle
 dataInFloat = rr.dataList
 sampleName = rr.sampleName
 
-#
-# # Create our master object to the Application
-# master = tk.Tk()
-#
-# # Create the text widget
-# text_widget = tk.Text(master, height=5, width=40)
-#
-# # Create a scrollbar
-# scroll_bar = tk.Scrollbar(master)
-#
-# # Pack the scroll bar
-# # Place it to the right side, using tk.RIGHT
-# scroll_bar.pack(side=tk.RIGHT)
-#
-# # Pack it into our tkinter application
-# # Place the text widget to the left side
-# text_widget.pack(side=tk.LEFT)
-#
-# long_text = """This is a multiline string.
-# We can write this in multiple lines too!
-# Hello from AskPython. This is the third line.
-# This is the fourth line. Although the length of the text is longer than
-# the width, we can use tkinter's scrollbar to solve this problem!
-# """
-#
-# # Insert text into the text widget
-# text_widget.insert(tk.END, long_text)
-#
-# # Start the mainloop
-# tk.mainloop()
+
 
 # get list of original data labels
 originalDataLabels = []
@@ -103,6 +74,32 @@ for a in range(len(dataInFloat)):
     originalAndCombinedData.append(qzInt)
 # print('originalAndCombinedData', originalAndCombinedData)
 
+# append combined data set to originalAndCombinedData
+oneDataSet = []
+# read number of data set in _combined folder
+for i in range(len(combinedDataLabels)):
+    filePath = folderDirectory + '/' + combinedDataLabels[i]
+    text = open(filePath, 'r')
+    fullText = [line.split(' ') for line in text.readlines()]
+    # print('i, fullText',i,  fullText)
+    oneRowInFloat = []
+    # rea one line each to convert string to float
+    for a in range(len(fullText)):
+        # print('fullText[a]', fullText[a])
+        oneDataInFloat = []
+        for b in range(2):
+            # print('a, b, fullText[a][b]',a, b, fullText[a][b])
+            oneData = float(fullText[a][b])
+            oneDataInFloat.append(oneData)
+        oneRowInFloat.append(oneDataInFloat)
+
+    oneDataSet.append(oneRowInFloat)
+    # print('oneDataSet', oneDataSet)
+# number of appended data set was correct
+originalAndCombinedData.append(oneDataSet)
+# print('originalAndCombinedData with combined', originalAndCombinedData)
+
+
 
 
 
@@ -113,11 +110,11 @@ ax_1.set_ylabel('intensity')
 ax_1.ticklabel_format(axis='both', style='scientific')
 ax_1.semilogy()
 
-textBoxLocation = fig_1.add_axes([0.05, 0.05, 0.05, 0.05])
+textBoxLocation = fig_1.add_axes([0.3, 0.9, 0.1, 0.05])
 ### make sure input has comma after number for single entry ###
-dataNumberToPlot = TextBox(textBoxLocation, 'selected number from data list')
+dataNumberToPlot = TextBox(textBoxLocation, 'select number from data list')
 
-print('after textBox')
+# print('after textBox')
 
 def getEntryNumber(expression):
     ax_1.clear()
@@ -127,21 +124,24 @@ def getEntryNumber(expression):
     ax_1.semilogy()
 
     enteredNumberToPlot = list(eval(expression))
+    print('enteredNumberToPlot', enteredNumberToPlot)
 
     colors = cycle(
         ["aqua", "black", "blue", "fuchsia", "gray", "green", "lime", "maroon", "navy", "olive", "purple", "red",
          "silver", "teal", "yellow"])
 
     for a in range(len(enteredNumberToPlot)):
-        if enteredNumberToPlot[a] <= len(originalAndCombinedData):
-            print(enteredNumberToPlot[a])
-            print('len(originalAndCombinedData)', len(originalAndCombinedData))
-            print('originalAndCombinedData[a][0]', originalAndCombinedData[a][0])
-            print('originalAndCombinedData[a][1]', originalAndCombinedData[a][1])
-            print('allDataList[a]', allDataList[a])
-            lineiData = ax_1.plot(originalAndCombinedData[a][0], originalAndCombinedData[a][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),
-                                    marker='.')
-            ax_1.legend(loc='best', fontsize='small')
+        #if enteredNumberToPlot[a] <= len(originalAndCombinedData):
+            # print(enteredNumberToPlot[a])
+            # print('len(originalAndCombinedData)', len(originalAndCombinedData))
+            # print('originalAndCombinedData[a][0]', originalAndCombinedData[a][0])
+            # print('originalAndCombinedData[a][1]', originalAndCombinedData[a][1])
+            # print('allDataList[a]', allDataList[a])
+        lineiData = ax_1.plot(originalAndCombinedData[a][0], originalAndCombinedData[a][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),
+                                marker='.')
+        ax_1.legend(loc='best', fontsize='small')
+
+
 
     # ax_1[1, 1].set_ylabel('Residual:2(S1-S2)/(E1+E2)', color = 'r')
     # ax_1[1, 1].tick_params(axis='y', labelcolor='r')
