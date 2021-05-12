@@ -50,6 +50,7 @@ ax_1[0, 0].semilogy()
 allplotsData = []
 allplotsErrorbar = []
 
+# TODO take 'entry' from .refl do not append with list order
 # plot thw whole entry(0 ~ n) in one plot
 for i in range(len(dataToPlot)):
     lineiData = ax_1[0, 0].plot(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), color=next(colors), marker='.')
@@ -96,6 +97,7 @@ def set_visible(label):
     # https://stackoverflow.com/questions/19470104/python-matplotlib-errorbar-legend-picking
     # allplotsErrorbar[index].set_visible(not allplotsErrorbar[index].get_visible())
 
+    # update legend and do not show the lines not shown, but label still exists
     ax_1[0, 0].legend(loc='best', fontsize='small')
     # lgd = ax_1[0, 0].legend()
     # lgd.set_visible(True)
@@ -247,32 +249,34 @@ def combineData(expression):
 
     dataToCombine = []
     for n in range(numberOfDataToCombine):
-        oneData = dataToPlot[entryNumberForCombineData[n]][1]
-        dataToCombine.append(oneData)
-
+        intOfOeDataSet = dataToPlot[entryNumberForCombineData[n]][1]
+        dataToCombine.append(intOfOeDataSet)
+    # taking the right data set, checked by first and last couple of intensity columns of selected data
     print('dataToCombine', dataToCombine)
 
-    # take length of Qz column, should be the same uf u take other columns
+    # take length of Qz column len(dataToPlot[entryNumberForCombineData[0]][0]), should be the same uf u take other columns
     # for loop appears to be working. entry1+entry2 in previous code with individualCombinedData = (S1+S2)/2 match with current code
     for a in range(len(dataToPlot[entryNumberForCombineData[0]][0])):
-        n=0
+        print('len(dataToPlot[entryNumberForCombineData[0]][0])', len(dataToPlot[entryNumberForCombineData[0]][0]))
+
         sumData = 0
-        while n in range(numberOfDataToCombine):
+        for n in range(numberOfDataToCombine):
+            # combine the values in the same row
             oneData = dataToPlot[entryNumberForCombineData[n]][1][a]
             #print('dataToPlot[entryNumberForCombineData[n]][1]', dataToPlot[entryNumberForCombineData[n]][1][a])
             #print(type(oneData))
-            sumData = sumData + oneData
+            print('oneData', oneData)
+            sumData = float(sumData) + float(oneData)
+            print('sumData', sumData)
             #print('sumData', sumData)
-            n = n+1
+
             #print('n', n)
 
         # combine n number of data points and divide by n
-        indivisualCombinedIntensity = sumData/n
+        print('numberOfDataToCombine after for n ...', numberOfDataToCombine)
+        indivisualCombinedIntensity = sumData/numberOfDataToCombine
+        print('indivisualCombinedIntensity', indivisualCombinedIntensity)
 
-        # S1 = dataToPlot[entryNumberForCombineData[0]][1][a]
-        # S2 = dataToPlot[entryNumberForCombineData[1]][1][a]
-
-        # individualCombinedData = (S1+S2)/2
         combinedIntensityList.append(indivisualCombinedIntensity)
 
     print('combinedIntensityList', combinedIntensityList)
@@ -318,7 +322,6 @@ def combineData(expression):
         if n < numberOfDataToCombine-1:
             print('n begining of  if', n)
             combinedEntryNames = combinedEntryNames + str(entryNumberForCombineData[n]) + ','
-            # n = n + 1
             print('n end of  if', n)
             print('numberOfDataToCombine-1', numberOfDataToCombine)
         elif n == numberOfDataToCombine-1:
@@ -339,11 +342,6 @@ def combineData(expression):
         f.write('\n')
 
     f.close
-
-    # read list of combined data in combine data folder
-    # path = folderDirectory
-    dirct = os.listdir(folderDirectory)
-    print('dirct', dirct)
 
     plt.draw()
 
