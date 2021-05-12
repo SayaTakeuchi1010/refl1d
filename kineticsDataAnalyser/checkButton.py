@@ -99,6 +99,7 @@ def set_visible(label):
     ax_1[0, 0].legend(loc='best', fontsize='small')
     # lgd = ax_1[0, 0].legend()
     # lgd.set_visible(True)
+
     plt.draw()
 
 chxbox.on_clicked(set_visible)
