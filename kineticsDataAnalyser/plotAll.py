@@ -51,7 +51,7 @@ print('originalDataLabels', originalDataLabels)
 # get list of combined data labels
 parentDirectory = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer'
 folderName = sampleName + '_Combined'
-folderDirectory = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer/' + folderName + '/'
+folderDirectory = parentDirectory + '/' + folderName + '/'
 # read list of combined data in combine data folder
 # path = folderDirectory
 combinedDataLabels = os.listdir(folderDirectory)
@@ -77,8 +77,33 @@ lb.pack(side="left",fill="both", expand=True)
 for i in range(len(allDataList)):
     lb.insert(str(i+1), str(i) + ' : ' + allDataList[i])
 
-tkMaster.mainloop()
+
 ### tk inter part end ###
+
+
+### matplotlib part ###
+
+originalAndCombinedData = []
+for a in range(len(dataInFloat)):
+    # print('a', a)
+    qzInt = []
+    # create list of Qz
+    listOfQz = []
+    for i in range(len(dataInFloat[a])):
+        listOfQz.append(dataInFloat[a][i][0])
+    # print('listOfQz', listOfQz)
+
+    listOfInt = []
+    for i in range(len(dataInFloat[a])):
+        listOfInt.append(dataInFloat[a][i][1])
+    # print('listOfInt', listOfInt)
+
+    qzInt.append(listOfQz)
+    qzInt.append(listOfInt)
+    originalAndCombinedData.append(qzInt)
+# print('originalAndCombinedData', originalAndCombinedData)
+
+
 
 
 fig_1, ax_1 = plt.subplots()
@@ -90,32 +115,43 @@ ax_1.semilogy()
 
 textBoxLocation = fig_1.add_axes([0.05, 0.05, 0.05, 0.05])
 ### make sure input has comma after number for single entry ###
-textBox = TextBox(textBoxLocation, 'selected number from data list')
+dataNumberToPlot = TextBox(textBoxLocation, 'selected number from data list')
 
-
+print('after textBox')
 
 def getEntryNumber(expression):
-    ax.clear()
-    ax.set_title('Qz vs. Residual')
-    ax.set_xlabel('Qz ')
-    dataNumberToPlot = list(eval(expression))
+    ax_1.clear()
+    ax_1.set_title('Qz vs. Intensity')
+    ax_1.set_xlabel('Qz ')
+    ax_1.set_ylabel('intensity')
+    ax_1.semilogy()
+
+    enteredNumberToPlot = list(eval(expression))
 
     colors = cycle(
         ["aqua", "black", "blue", "fuchsia", "gray", "green", "lime", "maroon", "navy", "olive", "purple", "red",
          "silver", "teal", "yellow"])
 
-    for a in range(len(dataNumberToPlot)):
-        if dataNumberToPlot[a] <= len(dataToPlot):
-            lineiData = ax_1[0, 0].plot(dataToPlot[a][0], dataToPlot[a][1], label=allDataList[i], color=next(colors),
+    for a in range(len(enteredNumberToPlot)):
+        if enteredNumberToPlot[a] <= len(originalAndCombinedData):
+            print(enteredNumberToPlot[a])
+            print('len(originalAndCombinedData)', len(originalAndCombinedData))
+            print('originalAndCombinedData[a][0]', originalAndCombinedData[a][0])
+            print('originalAndCombinedData[a][1]', originalAndCombinedData[a][1])
+            print('allDataList[a]', allDataList[a])
+            lineiData = ax_1.plot(originalAndCombinedData[a][0], originalAndCombinedData[a][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),
                                     marker='.')
+            ax_1.legend(loc='best', fontsize='small')
 
-    ax_1[1, 1].set_ylabel('Residual:2(S1-S2)/(E1+E2)', color = 'r')
-    ax_1[1, 1].tick_params(axis='y', labelcolor='r')
-    residualsPlot = ax_1[1, 1].plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, color='r', marker='.')
+    # ax_1[1, 1].set_ylabel('Residual:2(S1-S2)/(E1+E2)', color = 'r')
+    # ax_1[1, 1].tick_params(axis='y', labelcolor='r')
+    # residualsPlot = ax_1[1, 1].plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, color='r', marker='.')
 
     plt.draw()
 
-entryForResiduals.on_submit(getEntryNumber)
+dataNumberToPlot.on_submit(getEntryNumber)
 
 
 plt.show()
+
+tkMaster.mainloop()
