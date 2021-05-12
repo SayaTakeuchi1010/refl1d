@@ -41,12 +41,14 @@ tkMaster = tk.Tk()
 scrollbar = tk.Scrollbar(tkMaster, orient="vertical")
 lb = tk.Listbox(tkMaster, width=50, height=20, yscrollcommand=scrollbar.set)
 scrollbar.config(command=lb.yview)
+tkMaster.title('List of data selection')
 
 scrollbar.pack(side="right", fill="y")
 lb.pack(side="left",fill="both", expand=True)
 
+lb.insert(0, 'number to select data : data set name')
 for i in range(len(allDataList)):
-    lb.insert(str(i+1), str(i) + ' : ' + allDataList[i])
+    lb.insert(str(i+2), str(i) + ' : ' + allDataList[i])
 
 
 ### tk inter part end ###
