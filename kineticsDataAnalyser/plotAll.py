@@ -36,6 +36,7 @@ for i in range(len(originalDataLabels)):
 for i in range(len(combinedDataLabels)):
     allDataList.append(combinedDataLabels[i])
 print('allDataList', allDataList)
+print('allDataList[11]', allDataList[11])
 
 tkMaster = tk.Tk()
 scrollbar = tk.Scrollbar(tkMaster, orient="vertical")
@@ -94,16 +95,32 @@ for i in range(len(combinedDataLabels)):
             oneData = float(fullText[a][b])
             oneDataInFloat.append(oneData)
         oneRowInFloat.append(oneDataInFloat)
+        print('oneDataInFloat', oneDataInFloat)
 
     oneDataSet.append(oneRowInFloat)
-    # print('oneDataSet', oneDataSet)
+    print('oneDataSet', oneDataSet)
 # number of appended data set was correct
-originalAndCombinedData.append(oneDataSet)
-# print('originalAndCombinedData with combined', originalAndCombinedData)
 
+### TODO this is duplicate of a method ###
+for a in range(len(oneDataSet)):
+    # print('a', a)
+    qzInt = []
+    # create list of Qz
+    listOfQz = []
+    for i in range(len(oneDataSet[a])):
+        listOfQz.append(oneDataSet[a][i][0])
+    # print('listOfQz', listOfQz)
 
+    listOfInt = []
+    for i in range(len(oneDataSet[a])):
+        listOfInt.append(oneDataSet[a][i][1])
+    # print('listOfInt', listOfInt)
 
+    qzInt.append(listOfQz)
+    qzInt.append(listOfInt)
+    originalAndCombinedData.append(qzInt)
 
+print('originalAndCombinedData with combined', originalAndCombinedData)
 
 fig_1, ax_1 = plt.subplots()
 ax_1.set_title('Qz vs. Intensity')
@@ -134,12 +151,12 @@ def getEntryNumber(expression):
 
     for a in range(len(enteredNumberToPlot)):
         #if enteredNumberToPlot[a] <= len(originalAndCombinedData):
-            # print(enteredNumberToPlot[a])
-            # print('len(originalAndCombinedData)', len(originalAndCombinedData))
-            # print('originalAndCombinedData[a][0]', originalAndCombinedData[a][0])
-            # print('originalAndCombinedData[a][1]', originalAndCombinedData[a][1])
-            # print('allDataList[a]', allDataList[a])
-        lineiData = ax_1.plot(originalAndCombinedData[a][0], originalAndCombinedData[a][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),
+        print(enteredNumberToPlot[a])
+        print('len(originalAndCombinedData)', len(originalAndCombinedData))
+        print('originalAndCombinedData[a][0]', originalAndCombinedData[enteredNumberToPlot[a]][0])
+        print('originalAndCombinedData[a][1]', originalAndCombinedData[enteredNumberToPlot[a]][1])
+        print('allDataList[a]', allDataList[enteredNumberToPlot[a]])
+        lineiData = ax_1.plot(originalAndCombinedData[enteredNumberToPlot[a]][0], originalAndCombinedData[enteredNumberToPlot[a]][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),
                                 marker='.')
         ax_1.legend(loc='best', fontsize='small')
 
