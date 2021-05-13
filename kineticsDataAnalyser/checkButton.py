@@ -39,12 +39,12 @@ for a in range(len(dataInFloat)):
 
 colors = cycle(["aqua", "black", "blue", "fuchsia", "gray", "green", "lime", "maroon", "navy", "olive", "purple", "red", "silver", "teal", "yellow"])
 
-fig_1, ax_1 = plt.subplots(nrows=2, ncols=3)
-ax_1[0, 0].set_title('Qz vs. Intensity')
-ax_1[0, 0].set_xlabel('Qz')
-ax_1[0, 0].set_ylabel('intensity')
-ax_1[0, 0].ticklabel_format(axis='both', style='scientific')
-ax_1[0, 0].semilogy()
+fig_1, ax_1 = plt.subplots(nrows=1, ncols=2)
+ax_1[0].set_title('Qz vs. Intensity')
+ax_1[0].set_xlabel('Qz')
+ax_1[0].set_ylabel('intensity')
+ax_1[0].ticklabel_format(axis='both', style='scientific')
+ax_1[0].semilogy()
 
 
 allplotsData = []
@@ -53,11 +53,11 @@ allplotsErrorbar = []
 # TODO take 'entry' from .refl do not append with list order
 # plot thw whole entry(0 ~ n) in one plot
 for i in range(len(dataToPlot)):
-    lineiData = ax_1[0, 0].plot(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), color=next(colors), marker='.')
+    lineiData = ax_1[0].plot(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), color=next(colors), marker='.')
     # print('lineiData', lineiData)
     allplotsData.append(lineiData)
     # add 'color, entry i' box in left panel
-    ax_1[0, 0].legend(loc='best', fontsize='small')
+    ax_1[0].legend(loc='best', fontsize='small')
 
 
 ### plot original data in ax_1[0, 0] end ###
@@ -73,7 +73,7 @@ for i in range(len(dataToPlot)):
 
 
 # make check box inside panel 2 (location 1 in figsize = (8, 4), nrows=1, ncols=3)
-rax = ax_1[0, 1]
+rax = ax_1[ 1]
 
 rax.set_title('List of data')
 
@@ -98,7 +98,7 @@ def set_visible(label):
     # allplotsErrorbar[index].set_visible(not allplotsErrorbar[index].get_visible())
 
     # update legend and do not show the lines not shown, but label still exists
-    ax_1[0, 0].legend(loc='best', fontsize='small')
+    ax_1[0].legend(loc='best', fontsize='small')
     # lgd = ax_1[0, 0].legend()
     # lgd.set_visible(True)
 
@@ -111,16 +111,17 @@ chxbox.on_clicked(set_visible)
 
 ### error bar plot part ####
 
-ax_1[1, 0].set_title('Qz vs. Intensity (error bar)')
-ax_1[1, 0].set_xlabel('Qz ')
-ax_1[1, 0].set_ylabel('Intensity ')
+fig_2, ax_2 = plt.subplots()
+ax_2.set_title('Qz vs. Intensity (error bar)')
+ax_2.set_xlabel('Qz ')
+ax_2.set_ylabel('Intensity ')
 
-textBoxLocation = fig_1.add_axes([0.05, 0.05, 0.05, 0.05])
+textBoxLocation = fig_2.add_axes([0.05, 0.05, 0.05, 0.05])
 ### make sure input has comma after number for single entry ###
 textBox = TextBox(textBoxLocation, 'input')
 
 def submit(expression):
-    ax_1[1, 0].clear()
+    ax_2.clear()
     selectedEntry = list(eval(expression))
     print('selectedEntry', selectedEntry)
     print(type(selectedEntry))
@@ -129,16 +130,16 @@ def submit(expression):
     for i in range(len(selectedEntry)):
         # print('i in submit for loop', i)
         # print('selectedEntry[i]', selectedEntry[i])
-        erroriData = ax_1[1, 0].errorbar(dataToPlot[selectedEntry[i]][0], dataToPlot[selectedEntry[i]][1], label='entry' + str(selectedEntry[i]), yerr=dataToPlot[selectedEntry[i]][2], color=next(colors))
+        erroriData = ax_2.errorbar(dataToPlot[selectedEntry[i]][0], dataToPlot[selectedEntry[i]][1], label='entry' + str(selectedEntry[i]), yerr=dataToPlot[selectedEntry[i]][2], color=next(colors))
         selectedPlotsData.append(erroriData)
-        ax_1[1, 0].legend(loc='best')
+        ax_2.legend(loc='best')
 
-    ax_1[1, 0].set_title('Qz vs. Intensity (error bar)')
-    ax_1[1, 0].set_xlabel('Qz ')
-    ax_1[1, 0].set_ylabel('Intensity ')
+    ax_2.set_title('Qz vs. Intensity (error bar)')
+    ax_2.set_xlabel('Qz ')
+    ax_2.set_ylabel('Intensity ')
     # error below
     # ax_1[1, 0].ticklabel_format(axis='both', style='scientific')
-    ax_1[1, 0].semilogy()
+    ax_2.semilogy()
     # ax_1[1, 0].autoscale_view()
 
     # below does not work
@@ -150,18 +151,20 @@ textBox.on_submit(submit)
 
 
 ### residuals plot part ####
-entryForResidualsLocation = fig_1.add_axes([0.5, 0.05, 0.05, 0.05])
+fig_3, ax_3 = plt.subplots()
+
+entryForResidualsLocation = fig_3.add_axes([0.5, 0.05, 0.05, 0.05])
 ### make sure input has comma after number for single entry ###
 entryForResiduals = TextBox(entryForResidualsLocation, 'selected entry number')
-ax_1[1, 1].set_title('Qz vs. Residual')
-ax_1[1, 1].set_xlabel('Qz ')
-ax_1[1, 1].set_ylabel('Residual: 2(S1-S2)/(E1 + E2)')
+ax_3.set_title('Qz vs. Residual')
+ax_3.set_xlabel('Qz ')
+ax_3.set_ylabel('Residual: 2(S1-S2)/(E1 + E2)')
 
 # ntryNumberForResidualList = []
 def getEntryNumber(expression):
-    ax_1[1, 1].clear()
-    ax_1[1, 1].set_title('Qz vs. Residual')
-    ax_1[1, 1].set_xlabel('Qz ')
+    ax_3.clear()
+    ax_3.set_title('Qz vs. Residual')
+    ax_3.set_xlabel('Qz ')
 
     entryNumberForResidual = list(eval(expression))
     # print('entryNumberForResidual', entryNumberForResidual)
@@ -207,14 +210,17 @@ def getEntryNumber(expression):
     # print('residualsList', residualsList)
     # print('relativeDifferencesList', relativeDifferencesList)
 
-    ax_1[1, 1].set_ylabel('Residual:2(S1-S2)/(E1+E2)', color = 'r')
-    ax_1[1, 1].tick_params(axis='y', labelcolor='r')
-    residualsPlot = ax_1[1, 1].plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, color='r', marker='.')
+    ax_3.set_ylabel('Residual:2(S1-S2)/(E1+E2)', color = 'r')
+    ax_3.tick_params(axis='y', labelcolor='r')
+    # TODO change line width
+    residualsPlot = ax_3.plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, color='r', marker='.')
 
-    ax_1_2 = ax_1[1, 1].twinx()
-    ax_1_2.tick_params(axis='y', labelcolor='b')
-    ax_1_2.set_ylabel('Relative Differences', color='b')
-    relativeDifferencesPlot = ax_1_2.plot(dataToPlot[entryNumberForResidual[0]][0], relativeDifferencesList, color='b', marker='.')
+    ax_3_2 = ax_3.twinx()
+    ax_3_2.tick_params(axis='y', labelcolor='b')
+    ax_3_2.set_ylabel('Relative Differences', color='b')
+
+    # TODO change line width
+    relativeDifferencesPlot = ax_3_2.plot(dataToPlot[entryNumberForResidual[0]][0], relativeDifferencesList, color='b', marker='.')
 
     # print('residual plot before draw')
 
@@ -226,17 +232,18 @@ entryForResiduals.on_submit(getEntryNumber)
 
 ### combine data and plot part ###
 
-entryForCombineDataLocation = fig_1.add_axes([0.8, 0.9, 0.05, 0.05])
+fig_4, ax_4 = plt.subplots()
+entryForCombineDataLocation = fig_4.add_axes([0.8, 0.9, 0.05, 0.05])
 ### make sure input has comma after number for single entry ###
 entryForCombineData = TextBox(entryForCombineDataLocation, 'combine data')
 
-ax_1[0, 2].set_title('combine data')
-ax_1[0, 2].set_xlabel('Qz')
-ax_1[0, 2].set_ylabel('intensity')
-ax_1[0, 2].semilogy()
+ax_4.set_title('combine data')
+ax_4.set_xlabel('Qz')
+ax_4.set_ylabel('intensity')
+ax_4.semilogy()
 
 def combineData(expression):
-    ax_1[0, 2].clear()
+    ax_4.clear()
     # entry must be only two selected data (list length must be 2 to make inside for-loop work
     entryNumberForCombineData = list(eval(expression))
 
@@ -282,13 +289,13 @@ def combineData(expression):
     print('combinedIntensityList', combinedIntensityList)
 
     # set aces label and semi log scale for y
-    ax_1[0, 2].set_xlabel('Qz')
-    ax_1[0, 2].set_ylabel('Intensity')
-    ax_1[0, 2].semilogy()
+    ax_4.set_xlabel('Qz')
+    ax_4.set_ylabel('Intensity')
+    ax_4.semilogy()
 
     # x axis : Qz = dataToPlot[entryNumberForCombineData[0]][0]
     # y axis : combined intensity = combinedDataList
-    combinedDataPlot = ax_1[0, 2].plot(dataToPlot[entryNumberForCombineData[0]][0], combinedIntensityList, color='k', marker='.')
+    combinedDataPlot = ax_4.plot(dataToPlot[entryNumberForCombineData[0]][0], combinedIntensityList, color='k', marker='.')
 
     # put Qz and combined intensity in one list
     combinedQzIntList = []
