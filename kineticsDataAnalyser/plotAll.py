@@ -4,6 +4,11 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import TextBox
 from readRefl1d import ReadRefl1d as rr
 from itertools import cycle
+from tkinter import *
+import numpy as np
+from matplotlib.collections import LineCollection
+from mpl_toolkits.mplot3d import Axes3D
+
 
 
 # get list from readRefl1d
@@ -41,6 +46,7 @@ print('allDataList[11]', allDataList[11])
 tkMaster = tk.Tk()
 scrollbar = tk.Scrollbar(tkMaster, orient="vertical")
 lb = tk.Listbox(tkMaster, width=50, height=20, yscrollcommand=scrollbar.set)
+
 scrollbar.config(command=lb.yview)
 tkMaster.title('List of data selection')
 
@@ -52,10 +58,49 @@ for i in range(len(allDataList)):
     lb.insert(str(i+2), str(i) + ' : ' + allDataList[i])
 
 
+# lb_2 = tk.Listbox(tkMaster, width=50, height=20, yscrollcommand=scrollbar.set)
+# lb_2.place(x=1, y=0)
+# scrollbar.config(command=lb_2.yview)
+# tkMaster.title('List of data check box')
+# scrollbar.pack(side="right", fill="y")
+# lb_2.pack(side="left",fill="both", expand=True)
+#
+#
+# gui_state = {}
+# for i in range(len(allDataList)):
+#     gui_state[str(i) + ' : ' + allDataList[i]] = BooleanVar()
+# print('gui_state', gui_state)
+#
+# lb_2.insert(0, 'check box to select data : data set name')
+# for item in gui_state.keys():
+#     lb_2.insert(END, item)
+#
+# def bind_checkboxen(master, category):
+#     # render checkboxes for category. Mutate category when checkboxes are toggled.
+#     global checkboxes
+#
+#     # delete old checkboxes
+#     for checkbox in checkboxes:
+#         checkbox.destroy()
+#     checkboxes = []
+#
+#     # create new ones based on category fields
+#     for key in category.keys():
+#         checkbox = Checkbutton(master, text=key, variable=category[key])
+#         # checkbox.place(x=300, y=0 + x)
+#         checkboxes.append(checkbox)
+#
+#
+# checkboxes = []
+
+
+
 ### tk inter part end ###
 
 
 ### matplotlib part ###
+
+# TODO make it in waterfall plot
 
 originalAndCombinedData = []
 for a in range(len(dataInFloat)):
@@ -95,10 +140,10 @@ for i in range(len(combinedDataLabels)):
             oneData = float(fullText[a][b])
             oneDataInFloat.append(oneData)
         oneRowInFloat.append(oneDataInFloat)
-        print('oneDataInFloat', oneDataInFloat)
+        # print('oneDataInFloat', oneDataInFloat)
 
     oneDataSet.append(oneRowInFloat)
-    print('oneDataSet', oneDataSet)
+    # print('oneDataSet', oneDataSet)
 # number of appended data set was correct
 
 ### TODO this is duplicate of a method ###
@@ -120,27 +165,31 @@ for a in range(len(oneDataSet)):
     qzInt.append(listOfInt)
     originalAndCombinedData.append(qzInt)
 
-print('originalAndCombinedData with combined', originalAndCombinedData)
+# print('originalAndCombinedData with combined', originalAndCombinedData)
 
-fig_1, ax_1 = plt.subplots()
-ax_1.set_title('Qz vs. Intensity')
-ax_1.set_xlabel('Qz')
-ax_1.set_ylabel('intensity')
-ax_1.ticklabel_format(axis='both', style='scientific')
-ax_1.semilogy()
+# fig_1, ax_1 = plt.subplot(111, projection='3d')
+fig= plt.figure()
+ax=plt.axes(projection='3d')
+ax.set_title('Qz vs. Intensity')
+ax.set_xlabel('Qz')
+ax.set_ylabel('intensity')
+ax.ticklabel_format(axis='both', style='scientific')
+# ax.semilogy()
+ax.set_zlabel('fileName')
 
-textBoxLocation = fig_1.add_axes([0.3, 0.9, 0.1, 0.05])
+textBoxLocation = fig.add_axes([0.3, 0.9, 0.1, 0.05])
 ### make sure input has comma after number for single entry ###
 dataNumberToPlot = TextBox(textBoxLocation, 'select number from data list')
 
 # print('after textBox')
 
 def getEntryNumber(expression):
-    ax_1.clear()
-    ax_1.set_title('Qz vs. Intensity')
-    ax_1.set_xlabel('Qz ')
-    ax_1.set_ylabel('intensity')
-    ax_1.semilogy()
+    ax.clear()
+    ax.set_title('Qz vs. Intensity')
+    ax.set_xlabel('Qz ')
+    ax.set_ylabel('intensity')
+    # ax.semilogy()
+    ax.set_zlabel('fileName')
 
     enteredNumberToPlot = list(eval(expression))
     print('enteredNumberToPlot', enteredNumberToPlot)
@@ -151,14 +200,19 @@ def getEntryNumber(expression):
 
     for a in range(len(enteredNumberToPlot)):
         #if enteredNumberToPlot[a] <= len(originalAndCombinedData):
-        print(enteredNumberToPlot[a])
-        print('len(originalAndCombinedData)', len(originalAndCombinedData))
-        print('originalAndCombinedData[a][0]', originalAndCombinedData[enteredNumberToPlot[a]][0])
-        print('originalAndCombinedData[a][1]', originalAndCombinedData[enteredNumberToPlot[a]][1])
-        print('allDataList[a]', allDataList[enteredNumberToPlot[a]])
-        lineiData = ax_1.plot(originalAndCombinedData[enteredNumberToPlot[a]][0], originalAndCombinedData[enteredNumberToPlot[a]][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),
-                                marker='.')
-        ax_1.legend(loc='best', fontsize='small')
+        # print(enteredNumberToPlot[a])
+        # print('len(originalAndCombinedData)', len(originalAndCombinedData))
+        # print('originalAndCombinedData[a][0]', originalAndCombinedData[enteredNumberToPlot[a]][0])
+        # print('originalAndCombinedData[a][1]', originalAndCombinedData[enteredNumberToPlot[a]][1])
+        # print('allDataList[a]', allDataList[enteredNumberToPlot[a]])
+
+        # lineiData = ax_1.plot(originalAndCombinedData[enteredNumberToPlot[a]][0], originalAndCombinedData[enteredNumberToPlot[a]][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),marker='.')
+        x = originalAndCombinedData[enteredNumberToPlot[a]][0]
+        y = originalAndCombinedData[enteredNumberToPlot[a]][1]
+        z = enteredNumberToPlot[a]
+        ax.legend(loc='best', fontsize='small')
+
+        ax.plot3D(x,y,z)
 
 
 
