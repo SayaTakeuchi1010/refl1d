@@ -154,6 +154,8 @@ ax_2.set_xlabel('Qz')
 ax_2.set_ylabel('intensity')
 ax_2.ticklabel_format(axis='both', style='scientific')
 ax_2.semilogy()
+# below line works to show line
+ax_2.plot(originalAndCombinedData[1][0], originalAndCombinedData[1][1], label=allDataList[1], color='k',marker='.')
 
 def getEntryNumber(expression):
     ax.clear()
@@ -177,7 +179,10 @@ def getEntryNumber(expression):
     for a in range(len(enteredNumberToPlot)):
         print('in for loop 2D plot')
         lineiData = ax_2.plot(originalAndCombinedData[enteredNumberToPlot[a]][0], originalAndCombinedData[enteredNumberToPlot[a]][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),marker='.')
+        print('lineiData' , lineiData )
         ax_2.legend(loc='best', fontsize='small')
+        # plt.draw()
+    print('after for loop for ax_2')
 
 
     for a in range(len(enteredNumberToPlot)):
