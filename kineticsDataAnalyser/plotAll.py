@@ -195,6 +195,14 @@ def getEntryNumber(expression):
         x = originalAndCombinedData[enteredNumberToPlot[a]][0]
         # 3D axes currently only support linear scales
         # https://matplotlib.org/stable/api/_as_gen/mpl_toolkits.mplot3d.axes3d.Axes3D.html
+        print('originalAndCombinedData[enteredNumberToPlot[a]][1]', originalAndCombinedData[enteredNumberToPlot[a]][1])
+
+        # this does not solve error in RuntimeWarning: divide by zero encountered in log
+        # y = []
+        # for i in range(len(originalAndCombinedData[enteredNumberToPlot[a]][1])):
+        #     yIndividual = np.log(originalAndCombinedData[enteredNumberToPlot[a]][1][i])
+        #     y.append(yIndividual)
+
         y = np.log(originalAndCombinedData[enteredNumberToPlot[a]][1])
 
         # set length of z to be the same as x and y to be able to plot
