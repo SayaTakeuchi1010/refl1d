@@ -147,12 +147,13 @@ dataNumberToPlot = TextBox(textBoxLocation, 'select number from data list')
 
 # print('after textBox')
 
-# fig_2, ax_2 = plt.figure()
-# ax.set_title('Qz vs. Intensity')
-# ax.set_xlabel('Qz')
-# ax.set_ylabel('intensity')
-# ax.ticklabel_format(axis='both', style='scientific')
-# ax.semilogy()
+fig_2, ax_2= plt.subplots()
+
+ax_2.set_title('Qz vs. Intensity')
+ax_2.set_xlabel('Qz')
+ax_2.set_ylabel('intensity')
+ax_2.ticklabel_format(axis='both', style='scientific')
+ax_2.semilogy()
 
 def getEntryNumber(expression):
     ax.clear()
@@ -169,6 +170,15 @@ def getEntryNumber(expression):
     colors = cycle(
         ["aqua", "black", "blue", "fuchsia", "gray", "green", "lime", "maroon", "navy", "olive", "purple", "red",
          "silver", "teal", "yellow"])
+    # # plot 2D figure
+    # ax_2.clear()
+    ax_2.set_xlabel('Qz ')
+    ax_2.set_ylabel('intensity(log)')
+    for a in range(len(enteredNumberToPlot)):
+        print('in for loop 2D plot')
+        lineiData = ax_2.plot(originalAndCombinedData[enteredNumberToPlot[a]][0], originalAndCombinedData[enteredNumberToPlot[a]][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),marker='.')
+        ax_2.legend(loc='best', fontsize='small')
+
 
     for a in range(len(enteredNumberToPlot)):
         #if enteredNumberToPlot[a] <= len(originalAndCombinedData):
@@ -180,6 +190,7 @@ def getEntryNumber(expression):
 
         # lineiData = ax_1.plot(originalAndCombinedData[enteredNumberToPlot[a]][0], originalAndCombinedData[enteredNumberToPlot[a]][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),marker='.')
 
+        # ax_2.plot()
 
         x = originalAndCombinedData[enteredNumberToPlot[a]][0]
         # 3D axes currently only support linear scales
@@ -198,13 +209,7 @@ def getEntryNumber(expression):
         ax.legend(loc='best', fontsize='small')
 
 
-    # # plot 2D figure
-    # ax.clear()
 
-
-    # ax_1[1, 1].set_ylabel('Residual:2(S1-S2)/(E1+E2)', color = 'r')
-    # ax_1[1, 1].tick_params(axis='y', labelcolor='r')
-    # residualsPlot = ax_1[1, 1].plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, color='r', marker='.')
 
     plt.draw()
 
