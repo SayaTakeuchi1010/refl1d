@@ -1,4 +1,3 @@
-import math
 
 filePath = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer/LionSi_kinetics4805_0.refl'
 
@@ -65,57 +64,12 @@ class ReadRefl1d:
                 oneRowInFloat.append(oneDataInARow)
             individualListInFloat.append(oneRowInFloat)
         dataList.append(individualListInFloat)
-    # print('dataList', dataList)
 
-    ### this part  moved into checkButton.py ###
-    ### this part needs to be fixed to take any selected entry number ##@
-    # residualList = []
-    # relativeDifferencesList = []
-    # for a in range(len(dataList) - 1):
-    #
-    #     indivisualResidualsList = []
-    #     individualRelativeDifferencesList = []
-    #     #len(dataList[a]) is number of rows in each entry
-    #     for b in range(len(dataList[a])):
-    #
-    #         if b <= len(dataList[a]):
-    #             # 2(S1-S2)/(E1+E2)  where S is specular intensity and E is SQRT(S)
-    #             S1 = dataList[a][b][1]
-    #             S2 = dataList[a + 1][b][1]
-    #             E1 = math.sqrt(S1)
-    #             E2 = math.sqrt(S2)
-    #
-    #             print('S1, S2, E1, E2', S1, S2, E1, E2)
-    #
-    #             try:
-    #                 residual = 2 * (S1 - S2) / (E1 + E2)
-    #                 relativeDifference = 2 * (S1 - S2) / (S1 + S2)
-    #                 indivisualResidualsList.append(residual)
-    #                 individualRelativeDifferencesList.append(relativeDifference)
-    #             except:
-    #                 # if E1+E2 = 0 or S1+S2 = 0
-    #                 indivisualResidualsList.append('value zero')
-    #                 individualRelativeDifferencesList.append('value zero')
-    #
-    #         else:
-    #             a + 1
-    #
-    #         # print('indivisualResidualsList', indivisualResidualsList)
-    #         # print('individualRelativeDifferencesList', individualRelativeDifferencesList)
-    #     residualList.append(indivisualResidualsList)
-    #     relativeDifferencesList.append(individualRelativeDifferencesList)
-    #     # print('residualList', residualList)
-    #     # print('relativeDifferencesList', relativeDifferencesList)
-    #
-    # def getSampleName(self, lines):s
+
     for i, line in enumerate(lines):
         if 'name' in line:
             sampleName = line[11:-2]
-    # return sampleName
 
-    print('sampleName', sampleName)
-
-    # print('entryNumberForResidual in readRefl1d', entryNumberForResidual)
 
 
 
