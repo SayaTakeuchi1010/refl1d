@@ -6,8 +6,7 @@ from readRefl1d import ReadRefl1d as rr
 from itertools import cycle
 from tkinter import *
 import numpy as np
-from matplotlib.collections import LineCollection
-from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.ticker import MaxNLocator
 
 
 
@@ -56,43 +55,6 @@ lb.pack(side="left",fill="both", expand=True)
 lb.insert(0, 'number to select data : data set name')
 for i in range(len(allDataList)):
     lb.insert(str(i+2), str(i) + ' : ' + allDataList[i])
-
-
-# lb_2 = tk.Listbox(tkMaster, width=50, height=20, yscrollcommand=scrollbar.set)
-# lb_2.place(x=1, y=0)
-# scrollbar.config(command=lb_2.yview)
-# tkMaster.title('List of data check box')
-# scrollbar.pack(side="right", fill="y")
-# lb_2.pack(side="left",fill="both", expand=True)
-#
-#
-# gui_state = {}
-# for i in range(len(allDataList)):
-#     gui_state[str(i) + ' : ' + allDataList[i]] = BooleanVar()
-# print('gui_state', gui_state)
-#
-# lb_2.insert(0, 'check box to select data : data set name')
-# for item in gui_state.keys():
-#     lb_2.insert(END, item)
-#
-# def bind_checkboxen(master, category):
-#     # render checkboxes for category. Mutate category when checkboxes are toggled.
-#     global checkboxes
-#
-#     # delete old checkboxes
-#     for checkbox in checkboxes:
-#         checkbox.destroy()
-#     checkboxes = []
-#
-#     # create new ones based on category fields
-#     for key in category.keys():
-#         checkbox = Checkbutton(master, text=key, variable=category[key])
-#         # checkbox.place(x=300, y=0 + x)
-#         checkboxes.append(checkbox)
-#
-#
-# checkboxes = []
-
 
 
 ### tk inter part end ###
@@ -167,15 +129,17 @@ for a in range(len(oneDataSet)):
 
 # print('originalAndCombinedData with combined', originalAndCombinedData)
 
-# fig_1, ax_1 = plt.subplot(111, projection='3d')
-fig= plt.figure()
+fig=plt.figure()
 ax=plt.axes(projection='3d')
 ax.set_title('Qz vs. Intensity')
 ax.set_xlabel('Qz')
-ax.set_ylabel('intensity')
+ax.set_zlabel('intensity')
 ax.ticklabel_format(axis='both', style='scientific')
-# ax.semilogy()
-ax.set_zlabel('fileName')
+# 3D does not support semilog scale
+# ax.semilogz()
+ax.set_ylabel('fileName')
+# set integer only for y axis tick
+ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
 textBoxLocation = fig.add_axes([0.3, 0.9, 0.1, 0.05])
 ### make sure input has comma after number for single entry ###
@@ -183,13 +147,21 @@ dataNumberToPlot = TextBox(textBoxLocation, 'select number from data list')
 
 # print('after textBox')
 
+# fig_2, ax_2 = plt.figure()
+# ax.set_title('Qz vs. Intensity')
+# ax.set_xlabel('Qz')
+# ax.set_ylabel('intensity')
+# ax.ticklabel_format(axis='both', style='scientific')
+# ax.semilogy()
+
 def getEntryNumber(expression):
     ax.clear()
     ax.set_title('Qz vs. Intensity')
     ax.set_xlabel('Qz ')
-    ax.set_ylabel('intensity')
+    ax.set_zlabel('intensity(log)')
     # ax.semilogy()
-    ax.set_zlabel('fileName')
+    ax.set_ylabel('entered position in text box')
+    ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
     enteredNumberToPlot = list(eval(expression))
     print('enteredNumberToPlot', enteredNumberToPlot)
@@ -207,13 +179,27 @@ def getEntryNumber(expression):
         # print('allDataList[a]', allDataList[enteredNumberToPlot[a]])
 
         # lineiData = ax_1.plot(originalAndCombinedData[enteredNumberToPlot[a]][0], originalAndCombinedData[enteredNumberToPlot[a]][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),marker='.')
+
+
         x = originalAndCombinedData[enteredNumberToPlot[a]][0]
-        y = originalAndCombinedData[enteredNumberToPlot[a]][1]
-        z = enteredNumberToPlot[a]
+        # 3D axes currently only support linear scales
+        # https://matplotlib.org/stable/api/_as_gen/mpl_toolkits.mplot3d.axes3d.Axes3D.html
+        y = np.log(originalAndCombinedData[enteredNumberToPlot[a]][1])
+
+        # set length of z to be the same as x and y to be able to plot
+        listForZ = []
+        for b in range(len(originalAndCombinedData[enteredNumberToPlot[a]][0])):
+            # cannot take string (file name) for ax
+            listForZ.append(a)
+
+        z = listForZ
+
+        ax.plot3D(x,z,y,label=allDataList[enteredNumberToPlot[a]])
         ax.legend(loc='best', fontsize='small')
 
-        ax.plot3D(x,y,z)
 
+    # # plot 2D figure
+    # ax.clear()
 
 
     # ax_1[1, 1].set_ylabel('Residual:2(S1-S2)/(E1+E2)', color = 'r')
