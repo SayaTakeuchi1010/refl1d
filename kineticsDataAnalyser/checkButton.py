@@ -187,11 +187,11 @@ def getEntryNumber(expression):
         # print('dataToPlot[entryNumberForResidual[1]]', dataToPlot[entryNumberForResidual[1]][0])
 
 
-        # 2(S1-S2)/(E1+E2)  where S is specular intensity and E is SQRT(S)
+        # 2(S1-S2)/(E1+E2)  where S is specular intensity and E is Undertainty
         S1 = dataToPlot[entryNumberForResidual[0]][1][a]
         S2 = dataToPlot[entryNumberForResidual[1]][1][a]
-        E1 = math.sqrt(S1)
-        E2 = math.sqrt(S2)
+        E1 = dataToPlot[entryNumberForResidual[0]][2][a]
+        E2 = dataToPlot[entryNumberForResidual[1]][2][a]
 
         print('S1, S2, E1, E2', S1, S2, E1, E2)
 
@@ -213,14 +213,14 @@ def getEntryNumber(expression):
     ax_3.set_ylabel('Residual:2(S1-S2)/(E1+E2)', color = 'r')
     ax_3.tick_params(axis='y', labelcolor='r')
     # TODO change line width
-    residualsPlot = ax_3.plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, color='r', marker='.')
+    residualsPlot = ax_3.plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, color='r', linewidth=0.5)
 
     ax_3_2 = ax_3.twinx()
     ax_3_2.tick_params(axis='y', labelcolor='b')
     ax_3_2.set_ylabel('Relative Differences', color='b')
 
     # TODO change line width
-    relativeDifferencesPlot = ax_3_2.plot(dataToPlot[entryNumberForResidual[0]][0], relativeDifferencesList, color='b', marker='.')
+    relativeDifferencesPlot = ax_3_2.plot(dataToPlot[entryNumberForResidual[0]][0], relativeDifferencesList, color='b', linewidth=0.5)
 
     # print('residual plot before draw')
 
