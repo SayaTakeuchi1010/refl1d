@@ -56,8 +56,6 @@ for i in range(len(allDataList)):
 
 ### matplotlib part ###
 
-# TODO make it in waterfall plot
-
 originalAndCombinedData = []
 for a in range(len(dataInFloat)):
     qzInt = []
@@ -118,7 +116,6 @@ ax.set_xlabel('Qz')
 ax.set_zlabel('intensity')
 ax.ticklabel_format(axis='both', style='scientific')
 # 3D does not support semilog scale
-# ax.semilogz()
 ax.set_ylabel('fileName')
 # set integer only for y axis tick
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
@@ -127,40 +124,31 @@ textBoxLocation = fig.add_axes([0.3, 0.9, 0.1, 0.05])
 ### make sure input has comma after number for single entry ###
 dataNumberToPlot = TextBox(textBoxLocation, 'select number from data list')
 
+colors = cycle(
+    ["aqua", "black", "blue", "fuchsia", "gray", "green", "lime", "maroon", "navy", "olive", "purple", "red",
+     "silver", "teal", "yellow"])
 
-fig_2, ax_2= plt.subplots()
 
-ax_2.set_title('Qz vs. Intensity')
-ax_2.set_xlabel('Qz')
-ax_2.set_ylabel('intensity')
-ax_2.ticklabel_format(axis='both', style='scientific')
-ax_2.semilogy()
-# below line works to show line
-# ax_2.plot(originalAndCombinedData[1][0], originalAndCombinedData[1][1], label=allDataList[1], color='k',marker='.')
-# ax_2.legend(loc='best', fontsize='small')
 
 def getEntryNumber(expression):
     ax.clear()
     ax.set_title('Qz vs. Intensity')
     ax.set_xlabel('Qz ')
     ax.set_zlabel('intensity(log)')
-    # ax.semilogy()
     ax.set_ylabel('entered position in text box')
     ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
     enteredNumberToPlot = list(eval(expression))
 
-    colors = cycle(
-        ["aqua", "black", "blue", "fuchsia", "gray", "green", "lime", "maroon", "navy", "olive", "purple", "red",
-         "silver", "teal", "yellow"])
-    # # plot 2D figure
+
+    # # # plot 2D figure
     # ax_2.clear()
-    ax_2.set_xlabel('Qz ')
-    ax_2.set_ylabel('intensity(log)')
-    for a in range(len(enteredNumberToPlot)):
-        lineiData = ax_2.plot(originalAndCombinedData[enteredNumberToPlot[a]][0], originalAndCombinedData[enteredNumberToPlot[a]][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),marker='.')
-        ax_2.legend(loc='best', fontsize='small')
-    plt.draw()
+    # ax_2.set_xlabel('Qz ')
+    # ax_2.set_ylabel('intensity(log)')
+    # for a in range(len(enteredNumberToPlot)):
+    #     lineiData = ax_2.plot(originalAndCombinedData[enteredNumberToPlot[a]][0], originalAndCombinedData[enteredNumberToPlot[a]][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),marker='.')
+    #     ax_2.legend(loc='best', fontsize='small')
+    # plt.draw()
 
 
     for a in range(len(enteredNumberToPlot)):
@@ -180,12 +168,37 @@ def getEntryNumber(expression):
         ax.plot3D(x,z,y,label=allDataList[enteredNumberToPlot[a]])
         ax.legend(loc='best', fontsize='small')
 
-
-
-
     plt.draw()
 
 dataNumberToPlot.on_submit(getEntryNumber)
+
+fig_2, ax_2= plt.subplots()
+
+ax_2.set_title('Qz vs. Intensity')
+ax_2.set_xlabel('Qz')
+ax_2.set_ylabel('intensity')
+ax_2.ticklabel_format(axis='both', style='scientific')
+ax_2.semilogy()
+
+textBoxLocation_2 = fig_2.add_axes([0.3, 0.9, 0.1, 0.05])
+### make sure input has comma after number for single entry ###
+dataNumberToPlot_2 = TextBox(textBoxLocation_2, 'select number from data list')
+
+def getEntryNumber_2D(expression):
+    enteredNumberToPlot = list(eval(expression))
+
+    # # plot 2D figure
+    ax_2.clear()
+    ax_2.set_xlabel('Qz ')
+    ax_2.set_ylabel('intensity')
+    ax_2.semilogy()
+    for a in range(len(enteredNumberToPlot)):
+        lineiData = ax_2.plot(originalAndCombinedData[enteredNumberToPlot[a]][0], originalAndCombinedData[enteredNumberToPlot[a]][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),marker='.')
+        ax_2.legend(loc='best', fontsize='small')
+    plt.draw()
+
+
+dataNumberToPlot_2.on_submit(getEntryNumber_2D)
 
 
 plt.show()
