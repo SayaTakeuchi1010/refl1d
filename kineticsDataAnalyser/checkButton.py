@@ -5,6 +5,9 @@ from readRefl1d import ReadRefl1d as rr
 from itertools import cycle
 import os
 
+### CHANGE DIRECTORY HERE ###
+parentDirectory = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer'
+
 # get list of float data and sampleName from readRefl1d
 dataInFloat = rr.dataList
 sampleName = rr.sampleName
@@ -156,18 +159,20 @@ entryForResiduals = TextBox(entryForResidualsLocation, 'entry two numbers to com
 ax_3.set_title('Qz vs. Residual')
 ax_3.set_xlabel('Qz ')
 ax_3.set_ylabel('Residual: 2(S1-S2)/(E1 + E2)', color='r')
-ax_3_2 = ax_3.twinx()
-ax_3_2.tick_params(axis='y', labelcolor='b')
-ax_3_2.set_ylabel('Relative Differences', color='b')
+# ax_3_2 = ax_3.twinx()
+# ax_3_2.tick_params(axis='y', labelcolor='b')
+# ax_3_2.set_ylabel('Relative Differences', color='b')
 ### make sure input has comma after number for single entry ###
 ax_3.text(0,1, 'format: #1, #2')
 
 # define calcuation process after box entry
 def getEntryNumber(expression):
     ax_3.clear()
-    ax_3.set_title('Qz vs. Residual')
-    ax_3.set_xlabel('Qz ')
-    ax_3.text(0, 1, 'format: #1, #2')
+    ax_3_2 = ax_3.twinx()
+    ax_3_2.clear()
+    # ax_3.set_title('Qz vs. Residual')
+    # ax_3.set_xlabel('Qz ')
+    # ax_3.text(0, 1, 'format: #1, #2')
 
     entryNumberForResidual = list(eval(expression))
 
@@ -201,11 +206,12 @@ def getEntryNumber(expression):
     # residualsPlot
     ax_3.plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, color='r', linewidth=0.5)
 
-    ax_3_2 = ax_3.twinx()
-    ax_3_2.tick_params(axis='y', labelcolor='b')
+
+
     ax_3_2.set_ylabel('Relative Differences', color='b')
     # relativeDifferencesPlot
     ax_3_2.plot(dataToPlot[entryNumberForResidual[0]][0], relativeDifferencesList, color='b', linewidth=0.5)
+    ax_3_2.tick_params(axis='y', labelcolor='b')
 
     plt.draw()
 
@@ -277,8 +283,7 @@ def combineData(expression):
         combinedQzIntList.append(oneLine)
 
     # create a folder  for combined data text if it doesn't exist
-    ### CHANGE DIRECTORY HERE ###
-    parentDirectory = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer'
+    # parentDirectory defined at the top
     folderName = sampleName + '_Combined'
     path = os.path.join(parentDirectory, folderName)
     try:
