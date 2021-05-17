@@ -4,33 +4,29 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import TextBox
 from readRefl1d import ReadRefl1d as rr
 from itertools import cycle
-from tkinter import *
 import numpy as np
 from matplotlib.ticker import MaxNLocator
 
+### CHANGE DIRECTORY HERE ###
+parentDirectory = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer'
 
 
 # get list from readRefl1d
 dataInFloat = rr.dataList
 sampleName = rr.sampleName
 
-
-
 # get list of original data labels
 originalDataLabels = []
 for i in range(len(dataInFloat)):
     label = sampleName + '_entry' + str(i)
     originalDataLabels.append(label)
-print('originalDataLabels', originalDataLabels)
 
 # get list of combined data labels
-parentDirectory = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer'
+
 folderName = sampleName + '_Combined'
 folderDirectory = parentDirectory + '/' + folderName + '/'
 # read list of combined data in combine data folder
-# path = folderDirectory
 combinedDataLabels = os.listdir(folderDirectory)
-print('combinedDataLabels', combinedDataLabels)
 
 allDataList = []
 # append list of original data to empty list
@@ -39,8 +35,6 @@ for i in range(len(originalDataLabels)):
 # append combined data list after original data
 for i in range(len(combinedDataLabels)):
     allDataList.append(combinedDataLabels[i])
-print('allDataList', allDataList)
-print('allDataList[11]', allDataList[11])
 
 tkMaster = tk.Tk()
 scrollbar = tk.Scrollbar(tkMaster, orient="vertical")
@@ -66,23 +60,19 @@ for i in range(len(allDataList)):
 
 originalAndCombinedData = []
 for a in range(len(dataInFloat)):
-    # print('a', a)
     qzInt = []
     # create list of Qz
     listOfQz = []
     for i in range(len(dataInFloat[a])):
         listOfQz.append(dataInFloat[a][i][0])
-    # print('listOfQz', listOfQz)
 
     listOfInt = []
     for i in range(len(dataInFloat[a])):
         listOfInt.append(dataInFloat[a][i][1])
-    # print('listOfInt', listOfInt)
 
     qzInt.append(listOfQz)
     qzInt.append(listOfInt)
     originalAndCombinedData.append(qzInt)
-# print('originalAndCombinedData', originalAndCombinedData)
 
 # append combined data set to originalAndCombinedData
 oneDataSet = []
@@ -91,43 +81,35 @@ for i in range(len(combinedDataLabels)):
     filePath = folderDirectory + '/' + combinedDataLabels[i]
     text = open(filePath, 'r')
     fullText = [line.split(' ') for line in text.readlines()]
-    # print('i, fullText',i,  fullText)
     oneRowInFloat = []
-    # rea one line each to convert string to float
+    # read one line each to convert string to float
     for a in range(len(fullText)):
         # print('fullText[a]', fullText[a])
         oneDataInFloat = []
         for b in range(2):
-            # print('a, b, fullText[a][b]',a, b, fullText[a][b])
             oneData = float(fullText[a][b])
             oneDataInFloat.append(oneData)
         oneRowInFloat.append(oneDataInFloat)
-        # print('oneDataInFloat', oneDataInFloat)
 
     oneDataSet.append(oneRowInFloat)
-    # print('oneDataSet', oneDataSet)
 # number of appended data set was correct
 
 ### TODO this is duplicate of a method ###
 for a in range(len(oneDataSet)):
-    # print('a', a)
     qzInt = []
     # create list of Qz
     listOfQz = []
     for i in range(len(oneDataSet[a])):
         listOfQz.append(oneDataSet[a][i][0])
-    # print('listOfQz', listOfQz)
 
     listOfInt = []
     for i in range(len(oneDataSet[a])):
         listOfInt.append(oneDataSet[a][i][1])
-    # print('listOfInt', listOfInt)
 
     qzInt.append(listOfQz)
     qzInt.append(listOfInt)
     originalAndCombinedData.append(qzInt)
 
-# print('originalAndCombinedData with combined', originalAndCombinedData)
 
 fig=plt.figure()
 ax=plt.axes(projection='3d')
@@ -145,7 +127,6 @@ textBoxLocation = fig.add_axes([0.3, 0.9, 0.1, 0.05])
 ### make sure input has comma after number for single entry ###
 dataNumberToPlot = TextBox(textBoxLocation, 'select number from data list')
 
-# print('after textBox')
 
 fig_2, ax_2= plt.subplots()
 
@@ -155,7 +136,8 @@ ax_2.set_ylabel('intensity')
 ax_2.ticklabel_format(axis='both', style='scientific')
 ax_2.semilogy()
 # below line works to show line
-ax_2.plot(originalAndCombinedData[1][0], originalAndCombinedData[1][1], label=allDataList[1], color='k',marker='.')
+# ax_2.plot(originalAndCombinedData[1][0], originalAndCombinedData[1][1], label=allDataList[1], color='k',marker='.')
+# ax_2.legend(loc='best', fontsize='small')
 
 def getEntryNumber(expression):
     ax.clear()
@@ -167,7 +149,6 @@ def getEntryNumber(expression):
     ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
     enteredNumberToPlot = list(eval(expression))
-    print('enteredNumberToPlot', enteredNumberToPlot)
 
     colors = cycle(
         ["aqua", "black", "blue", "fuchsia", "gray", "green", "lime", "maroon", "navy", "olive", "purple", "red",
@@ -177,37 +158,15 @@ def getEntryNumber(expression):
     ax_2.set_xlabel('Qz ')
     ax_2.set_ylabel('intensity(log)')
     for a in range(len(enteredNumberToPlot)):
-        print('in for loop 2D plot')
         lineiData = ax_2.plot(originalAndCombinedData[enteredNumberToPlot[a]][0], originalAndCombinedData[enteredNumberToPlot[a]][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),marker='.')
-        print('lineiData' , lineiData )
         ax_2.legend(loc='best', fontsize='small')
-        # plt.draw()
-    print('after for loop for ax_2')
+    plt.draw()
 
 
     for a in range(len(enteredNumberToPlot)):
-        #if enteredNumberToPlot[a] <= len(originalAndCombinedData):
-        # print(enteredNumberToPlot[a])
-        # print('len(originalAndCombinedData)', len(originalAndCombinedData))
-        # print('originalAndCombinedData[a][0]', originalAndCombinedData[enteredNumberToPlot[a]][0])
-        # print('originalAndCombinedData[a][1]', originalAndCombinedData[enteredNumberToPlot[a]][1])
-        # print('allDataList[a]', allDataList[enteredNumberToPlot[a]])
-
-        # lineiData = ax_1.plot(originalAndCombinedData[enteredNumberToPlot[a]][0], originalAndCombinedData[enteredNumberToPlot[a]][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),marker='.')
-
-        # ax_2.plot()
 
         x = originalAndCombinedData[enteredNumberToPlot[a]][0]
         # 3D axes currently only support linear scales
-        # https://matplotlib.org/stable/api/_as_gen/mpl_toolkits.mplot3d.axes3d.Axes3D.html
-        print('originalAndCombinedData[enteredNumberToPlot[a]][1]', originalAndCombinedData[enteredNumberToPlot[a]][1])
-
-        # this does not solve error in RuntimeWarning: divide by zero encountered in log
-        # y = []
-        # for i in range(len(originalAndCombinedData[enteredNumberToPlot[a]][1])):
-        #     yIndividual = np.log(originalAndCombinedData[enteredNumberToPlot[a]][1][i])
-        #     y.append(yIndividual)
-
         y = np.log(originalAndCombinedData[enteredNumberToPlot[a]][1])
 
         # set length of z to be the same as x and y to be able to plot
