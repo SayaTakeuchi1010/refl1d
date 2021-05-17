@@ -151,25 +151,32 @@ textBox.on_submit(submit)
 
 
 ### residuals plot part ####
-fig_3, ax_3 = plt.subplots()
-
+fig_3, ax_3 = plt.subplots(nrows=2, ncols=1)
+# fig_3, ax_3 = plt.subplots()
 entryForResidualsLocation = fig_3.add_axes([0.3, 0.9, 0.05, 0.05])
 
 entryForResiduals = TextBox(entryForResidualsLocation, 'entry two numbers to compare')
-ax_3.set_title('Qz vs. Residual')
-ax_3.set_xlabel('Qz ')
-ax_3.set_ylabel('Residual: 2(S1-S2)/(E1 + E2)', color='r')
+# ax_3.set_title('Qz vs. Residual')
+# ax_3.set_xlabel('Qz ')
+# ax_3.set_ylabel('Residual: 2(S1-S2)/(E1 + E2)', color='r')
+
+ax_3[0].set_title('Qz vs. Residual')
+ax_3[0].set_xlabel('Qz ')
+ax_3[0].set_ylabel('Residual: 2(S1-S2)/(E1 + E2)', color='r')
 # ax_3_2 = ax_3.twinx()
 # ax_3_2.tick_params(axis='y', labelcolor='b')
 # ax_3_2.set_ylabel('Relative Differences', color='b')
+ax_3[1].tick_params(axis='y', labelcolor='b')
+ax_3[1].set_ylabel('Relative Differences', color='b')
 ### make sure input has comma after number for single entry ###
-ax_3.text(0,1, 'format: #1, #2')
+ax_3[0].text(0,1, 'format: #1, #2')
 
 # define calcuation process after box entry
 def getEntryNumber(expression):
-    ax_3.clear()
-    ax_3_2 = ax_3.twinx()
-    ax_3_2.clear()
+    ax_3[0].clear()
+    ax_3[1].clear()
+    # ax_3_2 = ax_3.twinx()
+    # ax_3_2.clear()
     # ax_3.set_title('Qz vs. Residual')
     # ax_3.set_xlabel('Qz ')
     # ax_3.text(0, 1, 'format: #1, #2')
@@ -201,17 +208,26 @@ def getEntryNumber(expression):
 
     ## calculation checked with first and last of 3-4 rows of data set##
 
-    ax_3.set_ylabel('Residual:2(S1-S2)/(E1+E2)', color = 'r')
-    ax_3.tick_params(axis='y', labelcolor='r')
+    # ax_3.set_ylabel('Residual:2(S1-S2)/(E1+E2)', color = 'r')
+    # ax_3.tick_params(axis='y', labelcolor='r')
+    # # residualsPlot
+    # ax_3.plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, color='r', linewidth=0.5)
+
+    ax_3[0].set_ylabel('Residual:2(S1-S2)/(E1+E2)', color = 'r')
+    ax_3[0].tick_params(axis='y', labelcolor='r')
     # residualsPlot
-    ax_3.plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, color='r', linewidth=0.5)
+    ax_3[0].plot(dataToPlot[entryNumberForResidual[0]][0], residualsList, color='r', linewidth=0.5)
 
+    #
+    # ax_3_2.set_ylabel('Relative Differences', color='b')
+    # # # relativeDifferencesPlot
+    # ax_3_2.plot(dataToPlot[entryNumberForResidual[0]][0], relativeDifferencesList, color='b', linewidth=0.5)
+    # ax_3_2.tick_params(axis='y', labelcolor='b')
 
-
-    ax_3_2.set_ylabel('Relative Differences', color='b')
-    # relativeDifferencesPlot
-    ax_3_2.plot(dataToPlot[entryNumberForResidual[0]][0], relativeDifferencesList, color='b', linewidth=0.5)
-    ax_3_2.tick_params(axis='y', labelcolor='b')
+    ax_3[1].set_ylabel('Relative Differences', color='b')
+    # # relativeDifferencesPlot
+    ax_3[1].plot(dataToPlot[entryNumberForResidual[0]][0], relativeDifferencesList, color='b', linewidth=0.5)
+    ax_3[1].tick_params(axis='y', labelcolor='b')
 
     plt.draw()
 
@@ -226,7 +242,7 @@ fig_4, ax_4 = plt.subplots()
 entryForCombineDataLocation = fig_4.add_axes([0.8, 0.9, 0.05, 0.05])
 entryForCombineData = TextBox(entryForCombineDataLocation, 'combine data')
 
-ax_3.text(0,1, 'format: #1, #2')
+ax_4.text(0,1, 'format: #1, #2')
 
 ax_4.set_title('combine data')
 ax_4.set_xlabel('Qz')
