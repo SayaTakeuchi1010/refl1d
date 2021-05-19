@@ -4,6 +4,7 @@ from matplotlib.widgets import TextBox
 from readRefl1d import ReadRefl1d as rr
 from itertools import cycle
 import os
+import numpy as np
 
 ### CHANGE DIRECTORY HERE ###
 parentDirectory = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer'
@@ -259,6 +260,7 @@ def combineData(expression):
 
     # create empty list to put in combined data
     combinedIntensityList = []
+    combinedErrorList = []
 
     dataToCombine = []
     for n in range(numberOfDataToCombine):
@@ -282,6 +284,17 @@ def combineData(expression):
 
         combinedIntensityList.append(indivisualCombinedIntensity)
 
+        # E(combined) = Average E / SQRT(N)
+        # yerr = dataToPlot[selectedEntry[i]][2]
+        sumError = 0
+        for n in range(numberOfDataToCombine):
+            oneError = dataToPlot[entryNumberForCombineData[n]][2][a]
+            sumError = float(sumError) + float(oneError)
+
+        individualCombinedError = float(sumError)/np.sqrt(numberOfDataToCombine)
+        combinedErrorList.append(individualCombinedError)
+
+
     # set aces label and semi log scale for y
     ax_4.set_xlabel('Qz')
     ax_4.set_ylabel('Intensity')
@@ -289,7 +302,7 @@ def combineData(expression):
 
     # x axis : Qz = dataToPlot[entryNumberForCombineData[0]][0]
     # y axis : combined intensity = combinedDataList
-    combinedDataPlot = ax_4.plot(dataToPlot[entryNumberForCombineData[0]][0], combinedIntensityList, color='k', marker='.')
+    combinedDataPlot = ax_4.errorbar(dataToPlot[entryNumberForCombineData[0]][0], combinedIntensityList,yerr=combinedErrorList, color='k', marker='.')
 
     # put Qz and combined intensity in one list
     combinedQzIntList = []
