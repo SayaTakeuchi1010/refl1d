@@ -58,7 +58,7 @@ for i in range(len(allDataList)):
 
 originalAndCombinedData = []
 for a in range(len(dataInFloat)):
-    qzInt = []
+    qzIntErr = []
     # create list of Qz
     listOfQz = []
     for i in range(len(dataInFloat[a])):
@@ -68,9 +68,14 @@ for a in range(len(dataInFloat)):
     for i in range(len(dataInFloat[a])):
         listOfInt.append(dataInFloat[a][i][1])
 
-    qzInt.append(listOfQz)
-    qzInt.append(listOfInt)
-    originalAndCombinedData.append(qzInt)
+    listOfErr = []
+    for i in range(len(dataInFloat[a])):
+        listOfErr.append(dataInFloat[a][i][2])
+
+    qzIntErr.append(listOfQz)
+    qzIntErr.append(listOfInt)
+    qzIntErr.append(listOfErr)
+    originalAndCombinedData.append(qzIntErr)
 
 # append combined data set to originalAndCombinedData
 oneDataSet = []
@@ -84,7 +89,7 @@ for i in range(len(combinedDataLabels)):
     for a in range(len(fullText)):
         # print('fullText[a]', fullText[a])
         oneDataInFloat = []
-        for b in range(2):
+        for b in range(3):
             oneData = float(fullText[a][b])
             oneDataInFloat.append(oneData)
         oneRowInFloat.append(oneDataInFloat)
@@ -93,8 +98,23 @@ for i in range(len(combinedDataLabels)):
 # number of appended data set was correct
 
 ### TODO this is duplicate of a method ###
+# for a in range(len(oneDataSet)):
+#     qzInt = []
+#     # create list of Qz
+#     listOfQz = []
+#     for i in range(len(oneDataSet[a])):
+#         listOfQz.append(oneDataSet[a][i][0])
+#
+#     listOfInt = []
+#     for i in range(len(oneDataSet[a])):
+#         listOfInt.append(oneDataSet[a][i][1])
+#
+#     qzInt.append(listOfQz)
+#     qzInt.append(listOfInt)
+#     originalAndCombinedData.append(qzInt)
+
 for a in range(len(oneDataSet)):
-    qzInt = []
+    qzIntErr = []
     # create list of Qz
     listOfQz = []
     for i in range(len(oneDataSet[a])):
@@ -104,9 +124,14 @@ for a in range(len(oneDataSet)):
     for i in range(len(oneDataSet[a])):
         listOfInt.append(oneDataSet[a][i][1])
 
-    qzInt.append(listOfQz)
-    qzInt.append(listOfInt)
-    originalAndCombinedData.append(qzInt)
+    listOfErr = []
+    for i in range(len(oneDataSet[a])):
+        listOfErr.append(oneDataSet[a][i][2])
+
+    qzIntErr.append(listOfQz)
+    qzIntErr.append(listOfInt)
+    qzIntErr.append(listOfErr)
+    originalAndCombinedData.append(qzIntErr)
 
 
 fig=plt.figure()
@@ -193,7 +218,7 @@ def getEntryNumber_2D(expression):
     ax_2.set_ylabel('intensity')
     ax_2.semilogy()
     for a in range(len(enteredNumberToPlot)):
-        lineiData = ax_2.plot(originalAndCombinedData[enteredNumberToPlot[a]][0], originalAndCombinedData[enteredNumberToPlot[a]][1], label=allDataList[enteredNumberToPlot[a]], color=next(colors),marker='.')
+        lineiData = ax_2.errorbar(originalAndCombinedData[enteredNumberToPlot[a]][0], originalAndCombinedData[enteredNumberToPlot[a]][1], yerr=originalAndCombinedData[enteredNumberToPlot[a]][2], label=allDataList[enteredNumberToPlot[a]], color=next(colors),marker='.')
         ax_2.legend(loc='best', fontsize='small')
     plt.draw()
 
