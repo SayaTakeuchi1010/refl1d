@@ -12,6 +12,7 @@ parentDirectory = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer'
 # get list of float data and sampleName from readRefl1d
 dataInFloat = rr.dataList
 sampleName = rr.sampleName
+entryNames = rr.entryList
 
 
 ### plot original data in fig_1, ax_1[0]  ###
@@ -68,7 +69,9 @@ allplotsErrorbar = []
 # TODO take 'entry' from .refl do not append with list order
 # plot thw whole entry(0 ~ n) in one plot
 for i in range(len(dataToPlot)):
-    lineiMatplotlib = ax_1[0].plot(dataToPlot[i][0], dataToPlot[i][1], label='entry' + str(i), color=next(colors), marker='.')
+    # entry looks correct in order
+    print('dataToPlot[i][0], dataToPlot[i][1]', dataToPlot[i][0], dataToPlot[i][1])
+    lineiMatplotlib = ax_1[0].plot(dataToPlot[i][0], dataToPlot[i][1], label=entryNames[i], color=next(colors), marker='.')
     # print('lineiData', lineiData)
     allplotsMatplotlib.append(lineiMatplotlib)
     # add 'color, entry i' box in left panel
@@ -83,7 +86,7 @@ for i in range(len(dataToPlot)):
 # crate list of labels
 labels = []
 for i in range(len(dataToPlot)):
-    label = sampleName + '_entry' + str(i)
+    label = sampleName + '_' + entryNames[i]
     labels.append(label)
 
 
