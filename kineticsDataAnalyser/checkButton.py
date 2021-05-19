@@ -293,6 +293,7 @@ def combineData(expression):
 
         individualCombinedError = float(sumError)/np.sqrt(numberOfDataToCombine)
         combinedErrorList.append(individualCombinedError)
+    print('combinedErrorList', combinedErrorList)
 
 
     # set aces label and semi log scale for y
@@ -305,11 +306,12 @@ def combineData(expression):
     combinedDataPlot = ax_4.errorbar(dataToPlot[entryNumberForCombineData[0]][0], combinedIntensityList,yerr=combinedErrorList, color='k', marker='.')
 
     # put Qz and combined intensity in one list
-    combinedQzIntList = []
+    combinedQzIntErrList = []
     for a in range(len(dataToPlot[entryNumberForCombineData[0]][0])):
         # text format: str(Qz) + (space) + str(Intensity)
-        oneLine= str(dataToPlot[entryNumberForCombineData[0]][0][a]) + ' ' + str(combinedIntensityList[a])
-        combinedQzIntList.append(oneLine)
+        oneLine= str(dataToPlot[entryNumberForCombineData[0]][0][a]) + ' ' + str(combinedIntensityList[a]) + ' ' + str(combinedErrorList[a])
+        print('oneLine', oneLine)
+        combinedQzIntErrList.append(oneLine)
 
     # create a folder  for combined data text if it doesn't exist
     # parentDirectory defined at the top
@@ -343,7 +345,7 @@ def combineData(expression):
     # 'w+' overwrites previous data? "Date modified" time gets updated"
 
     # take each line in list and put into txt
-    for element in combinedQzIntList:
+    for element in combinedQzIntErrList:
         f.write(element)
         f.write('\n')
 
