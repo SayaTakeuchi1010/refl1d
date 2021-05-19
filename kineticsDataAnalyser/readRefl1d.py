@@ -1,4 +1,5 @@
 
+### CHANGE FILE PATH HERE ###
 filePath = 'C:/Users/saya6/Documents/NCNR/kineticsDataAnalizer/LionSi_kinetics4805_0.refl'
 
 class ReadRefl1d:
@@ -65,10 +66,20 @@ class ReadRefl1d:
             individualListInFloat.append(oneRowInFloat)
         dataList.append(individualListInFloat)
 
+    # order of the list is the same as in .refl
+    # print('dataList', dataList)
+
 
     for i, line in enumerate(lines):
         if 'name' in line:
             sampleName = line[11:-2]
+
+    entryList=[]
+    for i, line in enumerate(lines):
+        if 'entry' in line:
+            entryNumber = line[12:-2]
+            entryList.append(entryNumber)
+    # print(entryList)
 
 
 
