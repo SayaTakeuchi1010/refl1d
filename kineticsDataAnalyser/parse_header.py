@@ -5,7 +5,7 @@ import json
 
 def load_url(file_url):
     print (file_url)
-    fb = requests.get(file_url, verify=False)
+    fb = requests.get(file_url)
     f = h5py.File(io.BytesIO(fb.content))
     return f
 
